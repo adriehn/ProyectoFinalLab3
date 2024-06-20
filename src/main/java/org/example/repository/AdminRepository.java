@@ -17,7 +17,7 @@ public class AdminRepository implements CRUD, Logueo {
     private final String ADM_PATH = "src/main/resources/administrativos.json";
     private final Gson gson = new Gson();
 
-    public Map<String, Persona> mapAdm;
+    public static Map<String, Persona> mapAdm;
 
     public AdminRepository() {
         this.mapAdm = new TreeMap<>();

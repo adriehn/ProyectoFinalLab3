@@ -7,24 +7,29 @@ import java.util.Scanner;
 
 public class ClienteView {
 
-    public final String requestNameMessage = "Ingrese su nombre: ";
-    public final String requestDniMessage = "Ingrese su numero de DNI (sin puntos, ni coma): ";
-    public final String requestlastNameMessage = "Ingrese su apellido: ";
-    public final String requestEmailMessage = "Ingrese su email: ";
-    public final String requestPhoneMessage = "Ingrese su numero de teléfono: ";
-    public final String requestAddressMessage = "Ingrese su direccion: ";
-    public static final String requestPasswordMessage = "Ingrese su contraseña: ";
-    public static final String admMessage = "Se asigno correctamente su rol como administrativo.";
-    public static final String requestDepartmentMessage = "Ingrese su departamento: ";
-    public static final String requestSpecialityMessage = "Ingrese su especialidad: ";
+    public final String requestNameMessage = "\nIngrese su nombre: ";
+    public final String requestDniMessage = "\nIngrese su numero de DNI (sin puntos, ni coma): ";
+    public final String requestlastNameMessage = "\nIngrese su apellido: ";
+    public final String requestEmailMessage = "\nIngrese su email: ";
+    public final String requestPhoneMessage = "\nIngrese su numero de teléfono: ";
+    public final String requestAddressMessage = "\nIngrese su direccion: ";
+    public static final String requestPasswordMessage = "\nIngrese su contraseña: ";
+    public static final String requestPasswordMessage2 = "\nIngrese su nueva contraseña: ";
+    public static final String admMessage = "\nSe asigno correctamente su rol como administrativo.\n";
+    public static final String requestDepartmentMessage = "\nIngrese su departamento: ";
+    public static final String requestSpecialityMessage = "\nIngrese su especialidad: ";
 
+    public static final String registerOK = "\nRegistrado exitosamente!\n";
+    public static final String dniExistente = "\nEl DNI ingresado ya posee una cuenta.\n";
+    public static final String addFav = "\nSe ha agregado a sus favoritos.\n";
+    public static final String addBookError = "\nActualmente ya tiene una copia en su poder.\n";
+    public static final String changePassOK = "\nSu contraseña se ha actualizado correctamente.\n";
 
     Scanner scanner = new Scanner(System.in);
 
 
     public Cliente registerCliente() {
 
-        scanner.nextLine();
 
         String dni = pedirDato(requestDniMessage);
 
@@ -42,7 +47,7 @@ public class ClienteView {
 
         String passwordInput = pedirDato(requestPasswordMessage);
 
-        return new Cliente(dni,name,lastName,age,email,phone,address,passwordInput,false);
+        return new Cliente(dni, name, lastName, age, email, phone, address, passwordInput, false);
 
     }
 
@@ -57,6 +62,7 @@ public class ClienteView {
 
         return dato;
     }
+
 
     public static boolean checkInput(String atributo) throws MisExcepciones {
         try {
@@ -94,8 +100,7 @@ public class ClienteView {
         }
     }
 
-    public Integer opcionesCliente()
-    {
+    public Integer opcionesCliente() {
         System.out.println("01. Solicitar.");
         System.out.println("02. Agregar a Favoritos");
         System.out.println("03. Anterior.");
@@ -106,12 +111,57 @@ public class ClienteView {
         return scanner.nextInt();
     }
 
-    public Integer opcionesLibrosClientes()
-    {
+    public Integer opcionesLibrosClientes() {
         System.out.println("01. Ver libros solicitados.");
         System.out.println("02. Ver libros Favoritos.");
         System.out.println("03. Ver Historial libros solicitados.");
-        System.out.println("04. Salir.");
+        System.out.println("04. Modificar datos.");
+        System.out.println("05. Salir.");
         return scanner.nextInt();
     }
+
+    public Double setStars() {
+        System.out.println("De 1 a 5 estrellas, que tal te parecio este libro?");
+        Double estrellas = scanner.nextDouble();
+        scanner.nextLine();
+        if (estrellas < 0 || estrellas > 5) {
+            System.out.println("Ingrese de 1 a 5 por favor.");
+            estrellas = setStars();
+        }
+        return estrellas;
+    }
+
+    public int modificarCliente(Cliente user) {
+
+        displayClienteInfo(user);
+        System.out.println("01. Nombre.");
+        System.out.println("02. Apellido.");
+        System.out.println("03. Email.");
+        System.out.println("04. Direccion.");
+        System.out.println("05. Contraseña");
+        System.out.println("06. Volver.");
+        int opcion = scanner.nextInt();
+        scanner.nextLine();
+        return opcion;
+    }
+
+
+    public void displayClienteInfo(Cliente cliente) {
+        System.out.println("****************************");
+        System.out.println("*      Cliente Details     *");
+        System.out.println("****************************");
+        System.out.println("* DNI       : " + cliente.getDni());
+        System.out.println("* Name      : " + cliente.getName());
+        System.out.println("* Last Name : " + cliente.getLastName());
+        System.out.println("* Age       : " + cliente.getAge());
+        System.out.println("* Email     : " + cliente.getEmail());
+        System.out.println("* Phone     : " + cliente.getPhone());
+        System.out.println("* Address   : " + cliente.getAdress());
+        System.out.println("* Pass   : " + cliente.getPassword());
+        System.out.println("****************************");
+    }
+
+
+
 }
+

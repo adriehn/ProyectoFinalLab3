@@ -37,6 +37,16 @@ public class BookRepository implements CRUD {
         saveLibros();
     }
 
+    public Book searchLibroId(Integer id) {
+        for (Book libro : listaLibros) {
+            if (libro.getIdBook().equals(id)) {
+                System.out.println("libro encontrado");
+                return libro;
+            }
+        }
+        return null;
+    }
+
     @Override
     public Object create() {
         return null;
@@ -85,6 +95,8 @@ public class BookRepository implements CRUD {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
 }

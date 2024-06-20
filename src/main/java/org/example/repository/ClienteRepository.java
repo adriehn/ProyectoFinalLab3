@@ -44,7 +44,12 @@ public class ClienteRepository implements CRUD, Logueo {
 
 
     public boolean dniCheck(String dni) {
-        return mapClientes.containsKey(dni);
+        for (Cliente cliente : mapClientes.values()) {
+            if (cliente.getDni().equals(dni)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void saveClientes() {
@@ -80,7 +85,12 @@ public class ClienteRepository implements CRUD, Logueo {
 
     @Override
     public Object update(Object o) {
-        return null;
+
+        if (o instanceof Cliente) {
+            System.out.println("Actualizado Correctamente.");
+            saveClientes();
+        }
+        return o;
     }
 
     @Override

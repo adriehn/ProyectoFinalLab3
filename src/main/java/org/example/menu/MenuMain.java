@@ -24,8 +24,9 @@ public class MenuMain {
     private final ClienteRepository clienteRepository = new ClienteRepository();
 
     private final BookRepository bookRepository = new BookRepository();
-    private final BookController bookController = new BookController();
-    public AdminController adminController;
+    private final BookController bookController = new BookController(bookRepository);
+    public AdminRepository adminRepository = new AdminRepository();
+    public AdminController adminController = new AdminController(adminRepository,bookController);
 
     public MenuMain(AdminController adminController)
     {
@@ -34,7 +35,8 @@ public class MenuMain {
     }
 
 
-
+    public MenuMain() {
+    }
 
     public void mainFlow() {
         boolean exit = false;
@@ -80,19 +82,23 @@ public class MenuMain {
         }
     }
 
-    private void loginFlowAdm() {//Inicio session admin
-        scanner.nextLine();
+    private void loginFlowAdm() {
+        scanner.nextLine();  // Limpiar el buffer
         System.out.println(requestDniMessage);
         String userDniInput = scanner.nextLine();
         System.out.println(requestPasswordMessage);
         String passwordInput = scanner.nextLine();
 
-        Optional<Admin> admin = adminController.login(userDniInput, passwordInput);
-        if(admin.isPresent()) {
-            Admin a = admin.get();
-            adminController.inicio(a);
-        }else{
-            MisExcepciones.usuarioNoEncontrado();
+        try {
+            Optional<Admin> admin = adminController.login(userDniInput, passwordInput);
+            if (admin.isPresent()) {
+                Admin a = admin.get();
+                adminController.inicio(a);
+            } else {
+                throw new MisExcepciones("Usuario no encontrado");
+            }
+        } catch (MisExcepciones e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -100,19 +106,22 @@ public class MenuMain {
 
         clienteController.createPersona();
 
-        System.out.println("Registrado exitosamente!");
     }
 
     public void finalizarPrograma() {
         bookRepository.saveLibros();
         clienteRepository.saveClientes();
-        //adminRepository.saveAdm();
+        adminRepository.saveAdm();
     }
 
     public void cargarJson() {
-        //bookRepository.loadLibros();
+        bookRepository.loadLibros();
         clienteRepository.loadClientes();
         adminController.loadAdm();
     }
+
+    public void nose()
+    {}
+
 
 }

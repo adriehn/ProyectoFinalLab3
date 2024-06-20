@@ -7,19 +7,26 @@ public class MisExcepciones extends RuntimeException {
         super(message);
     }
 
+    public MisExcepciones() {
+    }
+
     public static MisExcepciones usuarioNoEncontrado() {
-        return new MisExcepciones("El usuario no existe.");
+        return new MisExcepciones("\n\nEl usuario no existe.\n\n");
     }
 
     public static MisExcepciones dniExistente() {
-        return new MisExcepciones("El DNI ya tiene una cuenta asociada.");
+        return new MisExcepciones("\n\nEl DNI ya tiene una cuenta asociada.\n\n");
     }
 
     public static MisExcepciones libroSinStock() {
-        return new MisExcepciones("El libro solicitado no se encuentra disponible.");
+        throw new MisExcepciones("\n\nEl libro solicitado no se encuentra disponible.");
+    }
+
+    public static MisExcepciones wrongPassword() {
+        throw new MisExcepciones("\n\nLa contraseña ingresada en incorrecta.");
     }
 
     public static MisExcepciones datoInvalido() {
-        return new MisExcepciones("Introdujo un dato que no corresponde.");
+        return new MisExcepciones("\nIntrodujo un dato que no corresponde.\n");
     }
 }
