@@ -24,29 +24,49 @@ public class ClienteController {
     private static final Config config = ConfigRepository.loadConfig();
     Scanner scanner = new Scanner(System.in);
 
-    public ClienteController() {}
+    public ClienteController() {
+    }
 
 
     public void inicio(Cliente user) {
         boolean exit = false;
-        List<Book> libros = bookRepository.getListaLibros();
+        List<Book> libros = bookController.getListaLibros();
 
         for (int i = 0; i < libros.size() && !exit; i++) {
             System.out.println(libros.get(i));
 
             Integer option = clienteView.opcionesCliente();
-            scanner.nextLine();
 
             switch (option) {
-                case 1 -> addBook(user, i, libros.get(i));
-                case 2 -> addBookFav(user, i);
+                case 1 -> addBook(user, libros.get(i));
+                case 2 -> addBookFav(user, libros.get(i));
                 case 3 -> i = anterior(i);
-                case 4 -> {}
+                case 4 -> {
+                }
                 case 5 -> perfil(user);
                 case 6 -> exit = true;
                 default -> System.out.println("Opción invalida");
             }
         }
+    }
+
+    public void addBook(Cliente user, Book libro) {
+        if (bookController.checkStock(libro)) {
+            user.getCurrentlyBorrowedBook().add(libro);
+            libro.setStock(libro.getStock() - 1);//se descuenta el stock en 1 unidad
+            deleteFav(user, libro); //Si el libro solicitado esta en sus Favoritos , es eliminado
+        } else {
+            MisExcepciones.libroSinStock();
+        }
+    }
+
+    public void deleteFav(Cliente user, Book libro) {
+        if (user.getListFavBook().contains(libro)) {
+            user.getListFavBook().remove(libro);
+        }
+    }
+    public void addBookFav(Cliente cliente, Book book) {
+        cliente.getListFavBook().add(book);
     }
 
     public int anterior(int i) {
@@ -64,7 +84,7 @@ public class ClienteController {
         while (!exit) {
 
             Integer option = clienteView.opcionesLibrosClientes();
-            scanner.nextLine();
+            //scanner.nextLine();
 
             switch (option) {
                 case 1 -> verLibrosSolicitados(user);
@@ -87,6 +107,7 @@ public class ClienteController {
 
             if (choice.equalsIgnoreCase("s")) {
                 devolution(user, solicitados.get(i));
+                setStars(solicitados.get(i));
                 solicitados.remove(i); // Eliminar el elemento actual de manera segura
                 i--; // Ajustar el índice después de la eliminación
             }
@@ -97,15 +118,18 @@ public class ClienteController {
     public void devolution(Cliente user, Book b) {
         user.getReturnHistory().put(b.getIdBook(), b);
     }
+    public void setStars (Book book)
+    {
+        System.out.println("De 1 a 5 estrellas, que tal te parecio este libro?");
+        Double estrellas = scanner.nextDouble();
+        bookController.addRating(book,estrellas);
+    }
 
     public void verLibrosFavoritos(Cliente user) {
-        Set<Book> fav = user.getListFavBook();
+        List<Book> list = new ArrayList<>(user.getListFavBook());
 
-        bookController.viewBooks((List<Book>) fav);
+        bookController.viewBooks(list);
 
-        for (Book b : fav) {
-            System.out.println(b);
-        }
     }
 
     public void verHistorialSolicitados(Cliente user) {
@@ -117,33 +141,9 @@ public class ClienteController {
 
         // Llamar al método viewBooks con la lista de libros
         bookController.viewBooks(bookList);
-
-        /*for (Map.Entry<Integer, Book> entry : historial.entrySet()) {
-
-            Integer key = entry.getKey();
-            Book libro = entry.getValue();
-            System.out.println("ID: " + key + "\n" + libro);
-
-        }*///chequear si esta bien
     }
 
-    public void addBookFav(Cliente cliente, int index) {
-        cliente.getListFavBook().add(BookRepository.listaLibros.get(index));
-    }
 
-    public void addBook(Cliente user, int index, Book libro) {
-        if (bookController.checkStock(libro)) {
-            List<Book> aux = bookRepository.getListaLibros();
-            if (index >= 0 && index < aux.size()) {
-                user.getCurrentlyBorrowedBook().add(aux.get(index));
-                Book b = aux.get(index);
-                b.setStock(b.getStock() - 1);
-                ///analizar si esta en fav para eliminarlo
-            } else {
-                throw new IndexOutOfBoundsException("Codigo de libro erroneo.");
-            }
-        }
-    }
 
     public void createPersona() {
 
@@ -164,8 +164,10 @@ public class ClienteController {
             } else {
                 clienteRepository.Register(newcliente);
             }
-        } else {
-            MisExcepciones.dniExistente();
+            System.out.println(clienteView.registerOK);
+        }
+        else {
+            System.out.println(clienteView.dniExistente);
         }
     }
 
@@ -192,7 +194,6 @@ public class ClienteController {
         }
 
     }
-
 
 
 }

@@ -10,29 +10,36 @@ import org.example.repository.ClienteRepository;
 import javax.swing.*;
 import java.io.IOException;
 
+import static java.awt.SystemColor.menu;
+
 public class Main {
-    //private static final MenuMain menu = new MenuMain();
 
     public static void main(String[] args) throws IOException {
 
         /////////////////////////////////////////////////////////////////
         ///////////////////////SECTOR PRUEBA
         //////////////////////////////////////////////////////////////////
-        AdminRepository adminRepository = new AdminRepository();
+       /* AdminRepository adminRepository = new AdminRepository();
         AdminController adminController =  new AdminController(adminRepository);
         MenuMain menuMain = new MenuMain(adminController);
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame(menuMain);
             mainFrame.setVisible(true);
         });
-
+*/
 
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
 
 
-        //menu.mainFlow();
+
+///verificar el ingreso de datos en rating del libro , si ingresa punto y no coma rompe
+
+
+        MenuMain menu = new MenuMain();
+
+        menu.mainFlow();
 
     }
 

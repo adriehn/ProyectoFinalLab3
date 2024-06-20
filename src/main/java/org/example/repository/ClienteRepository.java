@@ -44,7 +44,12 @@ public class ClienteRepository implements CRUD, Logueo {
 
 
     public boolean dniCheck(String dni) {
-        return mapClientes.containsKey(dni);
+        for (Cliente cliente : mapClientes.values()) {
+            if (cliente.getDni().equals(dni)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void saveClientes() {

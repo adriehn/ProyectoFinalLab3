@@ -49,4 +49,21 @@ public class Cliente extends Persona {
                 ", listFavBook=" + listFavBook +
                 '}';
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Cliente)) {
+            return false;
+        }
+        Cliente other = (Cliente) obj;
+        // Aquí puedes comparar los atributos heredados y propios
+        return super.equals(obj) && Objects.equals(this.getDni(), other.getDni());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getDni());
+    }
 }

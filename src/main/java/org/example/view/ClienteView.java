@@ -18,13 +18,14 @@ public class ClienteView {
     public static final String requestDepartmentMessage = "Ingrese su departamento: ";
     public static final String requestSpecialityMessage = "Ingrese su especialidad: ";
 
+    public static final String registerOK = "Registrado exitosamente!";
+    public static final String dniExistente = "El DNI ingresado ya posee una cuenta.";
 
     Scanner scanner = new Scanner(System.in);
 
 
     public Cliente registerCliente() {
 
-        scanner.nextLine();
 
         String dni = pedirDato(requestDniMessage);
 
@@ -57,6 +58,7 @@ public class ClienteView {
 
         return dato;
     }
+
 
     public static boolean checkInput(String atributo) throws MisExcepciones {
         try {

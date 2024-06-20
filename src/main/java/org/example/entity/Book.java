@@ -1,5 +1,7 @@
 package org.example.entity;
 
+import java.util.Objects;
+
 public class Book {
     private static Integer id = 0;
     private String nameBook;
@@ -12,7 +14,8 @@ public class Book {
     private Integer stock;
     private Integer idBook;
     private Integer sold;
-
+    private Integer totalRatings; // Total de puntuaciones recibidas
+    private Double sumRatings;    // Suma total de todas las puntuaciones asignadas
     public static Integer getId() {
         return id;
     }
@@ -101,6 +104,22 @@ public class Book {
         this.sold = sold;
     }
 
+    public Integer getTotalRatings() {
+        return totalRatings;
+    }
+
+    public void setTotalRatings(Integer totalRatings) {
+        this.totalRatings = totalRatings;
+    }
+
+    public Double getSumRatings() {
+        return sumRatings;
+    }
+
+    public void setSumRatings(Double sumRatings) {
+        this.sumRatings = sumRatings;
+    }
+
     public Book(String nameBook, String author, String publisher, String genero, String language, String synopsis, Integer stock, Integer sold) {
         this.nameBook = nameBook;
         this.author = author;
@@ -112,7 +131,21 @@ public class Book {
         this.stock = stock;
         this.idBook = ++id;
         this.sold = sold;
+        this.totalRatings = 0;
+        this.sumRatings = 0.0;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(idBook, book.idBook);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idBook);
     }
 
     @Override

@@ -34,7 +34,8 @@ public class MenuMain {
     }
 
 
-
+    public MenuMain() {
+    }
 
     public void mainFlow() {
         boolean exit = false;
@@ -100,7 +101,6 @@ public class MenuMain {
 
         clienteController.createPersona();
 
-        System.out.println("Registrado exitosamente!");
     }
 
     public void finalizarPrograma() {
@@ -112,7 +112,7 @@ public class MenuMain {
     public void cargarJson() {
         //bookRepository.loadLibros();
         clienteRepository.loadClientes();
-        adminController.loadAdm();
+        //adminController.loadAdm();
     }
 
 }
