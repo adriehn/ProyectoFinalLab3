@@ -11,7 +11,7 @@ public class MisExcepciones extends RuntimeException {
     }
 
     public static MisExcepciones usuarioNoEncontrado() {
-        return new MisExcepciones("\n\nEl usuario no existe.\n\n");
+        throw new MisExcepciones("\n\nEl usuario no existe.\n\n");
     }
 
     public static MisExcepciones dniExistente() {

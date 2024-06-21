@@ -14,12 +14,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class MenuMain {
-
-    public final String requestDniMessage = "Ingrese su numero de DNI (sin puntos, ni coma): ";
-    public static final String requestPasswordMessage = "Ingrese su contraseña: ";
-
     private final Scanner scanner = new Scanner(System.in);
-
     public final ClienteController clienteController = new ClienteController();
     private final ClienteRepository clienteRepository = new ClienteRepository();
 
@@ -27,7 +22,8 @@ public class MenuMain {
     private final BookController bookController = new BookController(bookRepository);
     public AdminRepository adminRepository = new AdminRepository();
     public AdminController adminController = new AdminController(adminRepository,bookController);
-
+    public final String requestDniMessage = "Ingrese su numero de DNI (sin puntos, ni coma): ";
+    public static final String requestPasswordMessage = "Ingrese su contraseña: ";
     public MenuMain(AdminController adminController)
     {
         this.adminController = adminController;
@@ -53,6 +49,7 @@ public class MenuMain {
                     """;
             System.out.println(loginMenu);
             int menuOption = scanner.nextInt();
+            scanner.nextLine();
 
             switch (menuOption) {
                 case 1 -> loginFlow();
@@ -65,25 +62,24 @@ public class MenuMain {
 
         finalizarPrograma();
     }
-
     private void loginFlow() {//Inicio session cliente
-        scanner.nextLine();
         System.out.println(requestDniMessage);
         String userDniInput = scanner.nextLine();
         System.out.println(requestPasswordMessage);
         String passwordInput = scanner.nextLine();
 
-        Optional<Cliente> user = clienteController.login(userDniInput, passwordInput);
-        if (user.isPresent()) {
-            Cliente c = user.get();
-            clienteController.inicio(c);
-        } else {
-            MisExcepciones.usuarioNoEncontrado();
+        try{
+            Optional<Cliente> user = clienteController.login(userDniInput, passwordInput);
+            user.ifPresentOrElse(Cliente -> clienteController.inicio(Cliente),()->MisExcepciones.usuarioNoEncontrado());
         }
+        catch (MisExcepciones e)
+        {
+            System.out.printf(e.getLocalizedMessage() );
+        }
+
     }
 
     private void loginFlowAdm() {
-        scanner.nextLine();  // Limpiar el buffer
         System.out.println(requestDniMessage);
         String userDniInput = scanner.nextLine();
         System.out.println(requestPasswordMessage);
@@ -117,11 +113,7 @@ public class MenuMain {
     public void cargarJson() {
         bookRepository.loadLibros();
         clienteRepository.loadClientes();
-        //adminController.loadAdm();
+        adminController.loadAdm();
     }
-
-    public void nose()
-    {}
-
 
 }

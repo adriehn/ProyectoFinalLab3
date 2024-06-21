@@ -4,11 +4,13 @@ import org.example.entity.Admin;
 import org.example.entity.Book;
 import org.example.exception.MisExcepciones;
 import org.example.repository.AdminRepository;
+import org.example.repository.implementations.Controller;
 import org.example.view.AdminView;
 
+import java.util.List;
 import java.util.Optional;
 
-public class AdminController {
+public class AdminController implements Controller {
 
 
     AdminRepository adminRepository;
@@ -17,53 +19,10 @@ public class AdminController {
     BookController bookController;
 
 
-    public AdminController(AdminRepository adminRepository, BookController bookController ) {
+    public AdminController(AdminRepository adminRepository, BookController bookController) {
         this.bookController = bookController;
         this.adminRepository = adminRepository;
     }
-
-
-    public void inicio(Admin admin) {
-        boolean exit = false;
-
-        while (!exit) {
-            Integer option = adminView.opcionesAdmin();
-
-            switch (option) {
-                case 1 -> bookController.creatBook(); // Agregar
-                case 2 -> bookController.editBook(); // Editar
-                case 3 -> toListBook();
-                case 4 -> searchLibro(); // Buscar
-                case 5 -> bookController.terminateBook(); // Dar de baja
-                case 6 -> exit = true;
-                default -> System.out.println("Opción inválida");
-            }
-        }
-    }
-
-    public void searchLibro()
-    {
-        Book libro = bookController.searchBookId();
-
-        if(libro != null)
-        {
-            bookController.viewBook(libro);
-        }
-        else
-        {
-            throw new MisExcepciones("libro no encontrado");
-        }
-    }
-
-    public void toListBook()
-    {
-        try {
-            bookController.toListBooks(); // Listar
-        } catch (MisExcepciones e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
 
     public Optional<Admin> login(String dni, String password) {
 
@@ -72,24 +31,60 @@ public class AdminController {
         Optional<Admin> requestedUser = Optional.ofNullable(adminRepository.findUser(dni));
 
         if (requestedUser.isEmpty()) {
-            System.out.println("Usuario no existe");
             return Optional.empty();
-
         }
         if (requestedUser.get().getPassword().equals(password)) {
-            System.out.println("Ingreso exitoso");
-
             return requestedUser;
         } else {
-            System.out.println("Contraseña incorrecta");
-
             return Optional.empty();
 
         }
 
     }
-    public void loadAdm()
-    {
+
+    @Override
+    public void inicio(Object o) {
+        if (o instanceof Admin)
+        {
+            boolean exit = false;
+
+            while (!exit) {
+                Integer option = adminView.opcionesAdmin();
+
+                switch (option) {
+                    case 1 -> bookController.creatBook(); // Agregar
+                    case 2 -> bookController.editBook(); // Editar
+                    case 3 -> toListBook();
+                    case 4 -> searchLibro();
+                    case 5 -> bookController.terminateBook(); // Dar de baja
+                    case 6 -> exit = true;
+                    default -> System.out.println("Opción inválida");
+                }
+            }
+        }
+    }
+
+
+    @Override
+    public Book searchLibro() {
+        Book libro = bookController.searchBookId();
+
+        if (libro != null) {
+            bookController.viewBook(libro);
+        }
+        return libro;
+    }
+
+    public void toListBook() {
+        try {
+            bookController.toListBooks(); // Listar
+        } catch (MisExcepciones e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public void loadAdm() {
         adminRepository.loadAdm();
     }
 }

@@ -35,6 +35,8 @@ public class Main {
 
 
 ///verificar el ingreso de datos en rating del libro , si ingresa punto y no coma rompe
+        ///admin : busca un libro fuera del indice y finaliza session.
+
 
 
         MenuMain menu = new MenuMain();

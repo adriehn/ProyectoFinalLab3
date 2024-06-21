@@ -3,19 +3,21 @@ package org.example.controller;
 import java.io.IOException;
 import java.util.*;
 
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.example.entity.*;
 import org.example.exception.MisExcepciones;
 import org.example.repository.*;
 import org.example.repository.AdminRepository;
 import org.example.repository.BookRepository;
 import org.example.repository.ClienteRepository;
+import org.example.repository.implementations.Controller;
 import org.example.view.ClienteView;
 
 
-public class ClienteController {
+public class ClienteController implements Controller {
 
-    private final BookController bookController = new BookController();
     private final BookRepository bookRepository = new BookRepository();
+    private final BookController bookController = new BookController(bookRepository);
 
     private final ClienteView clienteView = new ClienteView();
     private final ClienteRepository clienteRepository = new ClienteRepository();
@@ -27,31 +29,73 @@ public class ClienteController {
     public ClienteController() {
     }
 
+    @Override
+    public Optional<Cliente> login(String dni, String password) {
 
-    public void inicio(Cliente user) {
-        boolean exit = false;
-        List<Book> libros = bookController.getListaLibros();
+        ///Si la llamada a findUser devuelve null, "ofNullable" lo encapsula como un "optional" y lo verificamos en el primer if.
+        ///Optional es una clase que utiliza genéricos y verifica si tiene o no un valor dentro. Evitando el "NullPointerException".
+        Optional<Cliente> requestedUser = Optional.ofNullable(clienteRepository.findUser(dni));
 
-        for (int i = 0; !exit; ) {
-            i = restoreIndex(i, libros.size());
-            System.out.println(libros.get(i));
-
-            Integer option = clienteView.opcionesCliente();
-
-            switch (option) {
-                case 1 -> tryAddBook(user, libros.get(i));
-                case 2 -> addBookFav(user, libros.get(i));
-                case 3 -> i = anterior(i);
-                case 4 -> {
-                }
-                case 5 -> perfil(user);
-                case 6 -> exit = true;
-                default -> System.out.println("Opción invalida");
-            }
-            i++;
+        if (requestedUser.isEmpty()) {
+            return Optional.empty();
+        }
+        if (requestedUser.get().getPassword().equals(password)) {
+            return requestedUser;
+        } else {
+            return Optional.empty();
 
         }
     }
+
+    @Override
+    public void inicio(Object obj) {
+        if (obj instanceof Cliente) {
+            Cliente user = (Cliente) obj;
+            boolean exit = false;
+            List<Book> libros = bookController.getListaLibros();
+
+            for (int i = 0; !exit; ) {
+                i = restoreIndex(i, libros.size());
+                System.out.println(libros.get(i));
+
+                Integer option = clienteView.opcionesCliente();
+                switch (option) {
+                    case 1 -> tryAddBook(user, libros.get(i));
+                    case 2 -> addBookFav(user, libros.get(i));
+                    case 3 -> i = anterior(i);
+                    case 4 -> {
+                    }
+                    case 5 -> bookController.viewBooks(searchLibro());
+                    case 6 -> perfil(user);
+                    case 7 -> exit = true;
+                    default -> System.out.println("Opción invalida");
+                }
+                i++;
+            }
+        }
+    }
+
+    @Override
+    public List<Book> searchLibro() {
+        System.out.printf("Ingrese el nombre del libro: ");
+        String busqueda =  scanner.nextLine();
+        List<Book> librosEncontrados = new ArrayList<>();
+        List<Book> resultados = bookController.getListaLibros();
+
+        for (Book libro : resultados) {
+            // Verificar si el nombre o la descripción del producto contiene la palabra de búsqueda
+            if (libro.getNameBook().toLowerCase().contains(busqueda.toLowerCase()) ||
+                    libro.getSynopsis().toLowerCase().contains(busqueda.toLowerCase())) {
+                librosEncontrados.add(libro);
+            }
+        }
+
+        return librosEncontrados;
+    }
+
+
+
+
 
     public int restoreIndex(int i, int size) {
         if (i >= size) {
@@ -81,6 +125,7 @@ public class ClienteController {
                 bookRepository.saveLibros(); //se guardan los libros para persistir el nuevo stock
             } else {
                 System.out.println(clienteView.addBookError);
+                scanner.nextLine();
             }
         } else {
             addBookFav(user, libro);// si no hay Stock, se le guarda el libro en favoritos para el futuro
@@ -131,10 +176,10 @@ public class ClienteController {
 
     public boolean setUpdate(Cliente user, int opcion) {
         switch (opcion) {
-            case 1 -> user.setName(clienteView.pedirDato(clienteView.requestNameMessage));
-            case 2 -> user.setLastName(clienteView.pedirDato(clienteView.requestlastNameMessage));
-            case 3 -> user.setEmail(clienteView.pedirDato(clienteView.requestEmailMessage));
-            case 4 -> user.setAdress(clienteView.pedirDato(clienteView.requestAddressMessage));
+            case 1 -> user.setName((String) clienteView.pedirDato(clienteView.requestNameMessage));
+            case 2 -> user.setLastName((String) clienteView.pedirDato(clienteView.requestlastNameMessage));
+            case 3 -> user.setEmail((String) clienteView.pedirDato(clienteView.requestEmailMessage));
+            case 4 -> user.setAdress((String) clienteView.pedirDato(clienteView.requestAddressMessage));
             case 5 -> {
                 try {
                     user.setPassword(changePassword(user));
@@ -153,7 +198,7 @@ public class ClienteController {
 
     public String changePassword(Cliente user) {
         if (clienteView.pedirDato(clienteView.requestPasswordMessage).equals(user.getPassword())) {
-            return clienteView.pedirDato(clienteView.requestPasswordMessage2);
+            return (String) clienteView.pedirDato(clienteView.requestPasswordMessage2);
         } else {
             throw MisExcepciones.wrongPassword();
         }
@@ -216,9 +261,9 @@ public class ClienteController {
             if (config.getAdminPassword().equalsIgnoreCase(newcliente.getPassword())) {//Verificamos si la contraseña es la predefinida para registrar un nuevo admin
 
                 System.out.println(ClienteView.admMessage);
-                String newPassword = clienteView.pedirDato(clienteView.requestPasswordMessage);
-                String department = clienteView.pedirDato(clienteView.requestDepartmentMessage);
-                String speciality = clienteView.pedirDato(clienteView.requestSpecialityMessage);
+                String newPassword = (String) clienteView.pedirDato(clienteView.requestPasswordMessage);
+                String department = (String) clienteView.pedirDato(clienteView.requestDepartmentMessage);
+                String speciality = (String) clienteView.pedirDato(clienteView.requestSpecialityMessage);
 
                 adminRepository.Register(new Admin(newcliente.getDni(), newcliente.getName(), newcliente.getLastName(), newcliente.getAge(), newcliente.getEmail(), newcliente.getPhone(), newcliente.getAdress(), newPassword, true, department, speciality));
 
@@ -231,31 +276,6 @@ public class ClienteController {
         }
     }
 
-    public Optional<Cliente> login(String dni, String password) {
-
-        ///Si la llamada a findUser devuelve null, "ofNullable" lo encapsula como un "optional" y lo verificamos en el primer if.
-        ///Optional es una clase que utiliza genéricos y verifica si tiene o no un valor dentro. Evitando el "NullPointerException".
-        Optional<Cliente> requestedUser = Optional.ofNullable(clienteRepository.findUser(dni));
-
-        if (requestedUser.isEmpty()) {
-            System.out.println("Usuario no existe");
-            return Optional.empty();
-
-        }
-        if (requestedUser.get().getPassword().equals(password)) {
-            System.out.println("Ingreso exitoso");
-
-            return requestedUser;
-        } else {
-            System.out.println("Contraseña incorrecta");
-
-            return Optional.empty();
-
-        }
-
-    }
-
 
 }
-
 
