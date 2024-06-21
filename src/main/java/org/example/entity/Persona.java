@@ -1,5 +1,7 @@
 package org.example.entity;
 
+import java.util.Optional;
+
 public abstract class Persona {
     private static Integer id = 0;
     private String dni;
@@ -133,7 +135,6 @@ public abstract class Persona {
                 ", rol=" + rol +
                 '}';
     }
-
 
 
 }

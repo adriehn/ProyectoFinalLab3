@@ -1,7 +1,11 @@
 package org.example.exception;
 
 
+import java.util.Scanner;
+
 public class MisExcepciones extends RuntimeException {
+
+    private static Scanner scanner = new Scanner(System.in);
 
     public MisExcepciones(String message) {
         super(message);
@@ -10,8 +14,10 @@ public class MisExcepciones extends RuntimeException {
     public MisExcepciones() {
     }
 
+
+
     public static MisExcepciones usuarioNoEncontrado() {
-        return new MisExcepciones("\n\nEl usuario no existe.\n\n");
+        throw new MisExcepciones("\n\nEl usuario no existe.\n\n");
     }
 
     public static MisExcepciones dniExistente() {

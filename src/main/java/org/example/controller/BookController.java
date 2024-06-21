@@ -6,7 +6,6 @@ import org.example.repository.BookRepository;
 import org.example.view.BookView;
 
 import java.util.List;
-import java.util.Set;
 
 
 public class BookController {
@@ -18,8 +17,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    public BookController() {
-    }
+
 
     public void toListBooks() {
         List<Book> bookList = getListaLibros();
@@ -37,7 +35,7 @@ public class BookController {
 
     public void  terminateBook()//dar de baja logica
     {
-        Integer idBuscar = bookView.pedirEntero("Ingresar id del libro: ");
+        Integer idBuscar =  bookView.pedirEntero("Ingresar id del libro: ");
 
         Book book = bookRepository.searchLibroId(idBuscar);
 
@@ -91,10 +89,6 @@ public class BookController {
     }
 
     public boolean checkStock(Book Book) {
-        if (Book.getStock() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return Book.getStock() > 0;
     }
 }

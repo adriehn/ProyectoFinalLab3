@@ -13,14 +13,12 @@ public class Book {
     private String synopsis;
     private Double rate;
     private Integer stock;
-    private Integer idBook;
+    private final Integer idBook;
     private Integer sold;
     private Integer totalRatings; // Total de puntuaciones recibidas
     private Double sumRatings;    // Suma total de todas las puntuaciones asignadas
 
-    public static Integer getId() {
-        return id;
-    }
+
     public boolean isStatus() {
         return status;
     }
@@ -28,9 +26,7 @@ public class Book {
     public void setStatus() {
         this.status = !status;
     }
-    public static void setId(Integer id) {
-        Book.id = id;
-    }
+
 
     public String getNameBook() {
         return nameBook;
@@ -100,9 +96,7 @@ public class Book {
         return idBook;
     }
 
-    public void setIdBook(Integer idBook) {
-        this.idBook = idBook;
-    }
+
 
     public Integer getSold() {
         return sold;

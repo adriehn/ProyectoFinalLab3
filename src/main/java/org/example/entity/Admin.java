@@ -2,9 +2,9 @@ package org.example.entity;
 
 public class Admin extends Persona {
 
-    private String departament;
+    private final String departament;
 
-    private String speciality;
+    private final  String speciality;
 
     public Admin(String dni, String name, String lastName, Integer age, String email, String phone, String adress, String password, boolean rol, String departament, String speciality) {
         super(dni, name, lastName, age, email, phone, adress, password, rol);
@@ -12,9 +12,12 @@ public class Admin extends Persona {
         this.speciality = speciality;
     }
 
-    public void viewStadistics (){
 
+    public String getSpeciality() {
+        return speciality;
     }
 
-
+    public String getDepartament() {
+        return departament;
+    }
 }
