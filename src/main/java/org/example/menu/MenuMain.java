@@ -117,7 +117,7 @@ public class MenuMain {
     public void cargarJson() {
         bookRepository.loadLibros();
         clienteRepository.loadClientes();
-        adminController.loadAdm();
+        //adminController.loadAdm();
     }
 
     public void nose()
