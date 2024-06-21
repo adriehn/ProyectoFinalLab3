@@ -1,72 +1,51 @@
 package org.example.view;
 
 import org.example.entity.Book;
+import org.example.exception.MisExcepciones;
+import org.example.repository.implementations.View;
 
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-public class BookView {
+public class BookView implements View {
 
     Scanner scanner = new Scanner(System.in);
+    ClienteView clienteView = new ClienteView();
+    private final String requestNameBook = "Ingrese el nombre del libro: ";
+    private final String requestNameAuthor = "Introduce el autor del libro:";
+    private final String requestEditorial = "Introduce la editorial del libro:";
+    private final String requestGen = "Introduce el género del libro:";
+    private final String requestLanguage = "Introduce el idioma del libro:";
+    private final String requestSynopsis = "Introduce la sinopsis del libro:";
+    private final String requestRate = "Introduce la calificación del libro:";
+    private final String requestStock = "Introduce el stock del libro:";
+    private final String requestSold = "Introduce el número de libros vendidos:";
 
-    public Book creatBook()
-    {
 
-
-
-        String nombreLibro = null;
-        String autor = null;
-        String editorial = null;
-        String genero = null;
-        String idioma = null;
-        String sinopsis = null;
-        Double calificacion = null;
-        Integer stock = null;
-        Integer vendidos = null;
-
+    public Book creatBook() {
         try {
-            System.out.println("Introduce el nombre del libro:");
-            nombreLibro = scanner.nextLine();
-
-            System.out.println("Introduce el autor del libro:");
-            autor = scanner.nextLine();
-
-            System.out.println("Introduce la editorial del libro:");
-            editorial = scanner.nextLine();
-
-            System.out.println("Introduce el género del libro:");
-            genero = scanner.nextLine();
-
-            System.out.println("Introduce el idioma del libro:");
-            idioma = scanner.nextLine();
-
-            System.out.println("Introduce la sinopsis del libro:");
-            sinopsis = scanner.nextLine();
-
-            System.out.println("Introduce la calificación del libro:");
-            calificacion = scanner.nextDouble();
-
-            System.out.println("Introduce el stock del libro:");
-            stock = scanner.nextInt();
-
-            System.out.println("Introduce el número de libros vendidos:");
-            vendidos = scanner.nextInt();
-
+            String nombreLibro = (String) pedirDato(requestNameBook);
+            String autor = (String) pedirDato(requestNameAuthor);
+            String editorial = (String) pedirDato(requestEditorial);
+            String genero = (String) pedirDato(requestGen);
+            String idioma = (String) pedirDato(requestLanguage);
+            String sinopsis = (String) pedirDato(requestSynopsis);
+            Double calificacion = (Double) pedirDouble(requestRate);
+            Integer stock = (Integer) pedirEntero(requestStock);
+            Integer vendidos = (Integer) pedirEntero(requestSold);
+            return new Book(nombreLibro, autor, editorial, genero, idioma, sinopsis, stock, vendidos);
         } catch (InputMismatchException e) {
             System.err.println("Error: Entrada inválida. Por favor, ingresa el tipo de dato correcto.");
             scanner.nextLine(); // Limpiar el buffer
             return null;
         }
 
-        return new Book(nombreLibro,autor,editorial,genero,idioma,sinopsis,stock,vendidos);
     }
 
-    public static void viewBooks(List<Book> books)
-    {
-        for (Book libro : books)
-        {
+    public static void viewBooks(List<Book> books) {
+        for (Book libro : books) {
             System.out.println("-------------------------------------");
             viewBook(libro);
             System.out.println("-------------------------------------");
@@ -77,7 +56,7 @@ public class BookView {
     public static void viewBook(Book libro) {
         System.out.println("Datos del Libro:");
         System.out.println("Nombre: " + libro.getNameBook());
-        System.out.println("Id: " + libro.getIdBook());
+        System.out.println("ISBN: " + libro.getIdBook());
         System.out.println("Autor: " + libro.getAuthor());
         System.out.println("Editorial: " + libro.getPublisher());
         System.out.println("Género: " + libro.getGenero());
@@ -87,31 +66,10 @@ public class BookView {
         System.out.println("Stock: " + libro.getStock());
         System.out.println("Vendidos: " + libro.getSold());
         System.out.println("Estado: " + libro.isStatus());
+
     }
 
-    public Integer pedirEntero(String mensaje) {
-        while (true) {
-            try {
-
-                System.out.println(mensaje);
-                String input = scanner.nextLine();
-                scanner.nextLine();
-
-                // Verificar si la entrada está vacía o contiene solo espacios en blanco
-                if (input.trim().isEmpty()) {
-                    System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
-                    continue;
-                }
-
-                // Intentar convertir la entrada a un número entero
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
-            }
-        }
-    }
-
-    public void editarLibro(Book libro){
+    public void editarLibro(Book libro) {
 
         if (libro == null) {
             System.out.println("Libro no encontrado.");
@@ -131,7 +89,7 @@ public class BookView {
         int opcion = scanner.nextInt();
         scanner.nextLine();  // Limpiar el buffer
 
-        switch(opcion) {
+        switch (opcion) {
             case 1:
                 System.out.println("Nuevo nombre del libro:");
                 libro.setNameBook(scanner.nextLine());
@@ -174,4 +132,62 @@ public class BookView {
         }
     }
 
+    @Override
+    public Object pedirEntero(Object o) {
+        if (o instanceof String) {
+            while (true) {
+                try {
+                    System.out.println(o);
+                    String input = scanner.nextLine();
+
+                    // Verificar si la entrada está vacía o contiene solo espacios en blanco
+                    if (input.trim().isEmpty()) {
+                        System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
+                        continue;
+                    }
+
+                    // Intentar convertir la entrada a un número entero
+                    return Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
+                }
+            }
+        }
+        return null;
+
+    }
+
+    @Override
+    public Object pedirDouble(Object o) {
+        if (o instanceof String) {
+            while (true) {
+                try {
+                    System.out.println(o);
+                    String input = scanner.nextLine().trim();
+
+                    double numero = Double.parseDouble(input);
+
+                    return numero;
+                } catch (NumberFormatException e) {
+                    System.err.println("Entrada inválida. Por favor, ingrese un número válido.");
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Object pedirDato(Object o) throws MisExcepciones {
+        String dato = null;
+        if (o instanceof String) {
+            System.out.println(o);
+            dato = scanner.nextLine();
+
+            while (!clienteView.checkInput(dato)) {
+                System.out.println("Reingrese el dato.");
+                dato = scanner.nextLine();
+            }
+        }
+        return ((String) dato);
+    }
 }

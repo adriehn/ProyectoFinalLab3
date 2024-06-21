@@ -2,10 +2,11 @@ package org.example.view;
 
 import org.example.entity.Cliente;
 import org.example.exception.MisExcepciones;
+import org.example.repository.implementations.View;
 
 import java.util.Scanner;
 
-public class ClienteView {
+public class ClienteView implements View {
 
     public final String requestNameMessage = "\nIngrese su nombre: ";
     public final String requestDniMessage = "\nIngrese su numero de DNI (sin puntos, ni coma): ";
@@ -13,6 +14,7 @@ public class ClienteView {
     public final String requestEmailMessage = "\nIngrese su email: ";
     public final String requestPhoneMessage = "\nIngrese su numero de teléfono: ";
     public final String requestAddressMessage = "\nIngrese su direccion: ";
+    public final String requestAge = "\nIngrese su edad: ";
     public static final String requestPasswordMessage = "\nIngrese su contraseña: ";
     public static final String requestPasswordMessage2 = "\nIngrese su nueva contraseña: ";
     public static final String admMessage = "\nSe asigno correctamente su rol como administrativo.\n";
@@ -28,39 +30,28 @@ public class ClienteView {
     Scanner scanner = new Scanner(System.in);
 
 
+
     public Cliente registerCliente() {
 
 
-        String dni = pedirDato(requestDniMessage);
+        String dni = (String) pedirDato(requestDniMessage);
 
-        String name = pedirDato(requestNameMessage);
+        String name = (String) pedirDato(requestNameMessage);
 
-        String lastName = pedirDato(requestlastNameMessage);
+        String lastName = (String) pedirDato(requestlastNameMessage);
 
-        Integer age = pedirEntero();
+        Integer age = (Integer) pedirEntero(requestAge);
 
-        String email = pedirDato(requestEmailMessage);
+        String email = (String) pedirDato(requestEmailMessage);
 
-        String phone = pedirDato(requestPhoneMessage);
+        String phone = (String) pedirDato(requestPhoneMessage);
 
-        String address = pedirDato(requestAddressMessage);
+        String address = (String) pedirDato(requestAddressMessage);
 
-        String passwordInput = pedirDato(requestPasswordMessage);
+        String passwordInput = (String) pedirDato(requestPasswordMessage);
 
         return new Cliente(dni, name, lastName, age, email, phone, address, passwordInput, false);
 
-    }
-
-    public String pedirDato(String mensaje) throws MisExcepciones {
-        System.out.println(mensaje);
-        String dato = scanner.nextLine();
-
-        while (!checkInput(dato)) {
-            System.out.println("Reingrese el dato.");
-            dato = scanner.nextLine();
-        }
-
-        return dato;
     }
 
 
@@ -80,24 +71,64 @@ public class ClienteView {
         return true;
     }
 
-    private Integer pedirEntero() {
-        while (true) {
-            try {
-                System.out.println("Ingrese su edad: ");
-                String input = scanner.nextLine();
+    @Override
+    public Object pedirEntero(Object o) {
+        if (o instanceof String) {
+            while (true) {
+                try {
+                    System.out.println(o);
+                    String input = scanner.nextLine().trim();
 
-                // Verificar si la entrada está vacía o contiene solo espacios en blanco
-                if (input.trim().isEmpty()) {
+                    // Verificar si la entrada está vacía o contiene solo espacios en blanco
+                    if (input.isEmpty()) {
+                        System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
+                        continue;
+                    }
+                    // Intentar convertir la entrada a un número entero
+                    return Integer.parseInt(input);
+                } catch (NumberFormatException e) {
                     System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
-                    continue;
                 }
-
-                // Intentar convertir la entrada a un número entero
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.err.println("Entrada inválida. Por favor, ingrese un número entero.");
             }
         }
+        return null;
+    }
+
+
+    @Override
+    public Object pedirDouble(Object o) {
+        if (o instanceof String) {
+            while (true) {
+                try {
+                    System.out.println(o);
+                    String input = scanner.nextLine().trim();
+
+                    // Intentar convertir la entrada a un número double
+                    double numero = Double.parseDouble(input);
+
+                    // Si la conversión fue exitosa, retornar el número
+                    return numero;
+                } catch (NumberFormatException e) {
+                    System.err.println("Entrada inválida. Por favor, ingrese un número válido.");
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Object pedirDato(Object o) throws MisExcepciones {
+        String dato = null;
+        if (o instanceof String) {
+            System.out.println(o);
+            dato = scanner.nextLine();
+
+            while (!checkInput(dato)) {
+                System.out.println("Reingrese el dato.");
+                dato = scanner.nextLine();
+            }
+        }
+        return ((String) dato);
     }
 
     public Integer opcionesCliente() {
@@ -105,8 +136,9 @@ public class ClienteView {
         System.out.println("02. Agregar a Favoritos");
         System.out.println("03. Anterior.");
         System.out.println("04. Siguiente.");
-        System.out.println("05. Perfil.");
-        System.out.println("06. Salir..");
+        System.out.println("05. Buscar libro");
+        System.out.println("06. Perfil.");
+        System.out.println("07. Cerrar Session..");
         System.out.print("Ingresar opcion: ");
         return scanner.nextInt();
     }
@@ -116,13 +148,14 @@ public class ClienteView {
         System.out.println("02. Ver libros Favoritos.");
         System.out.println("03. Ver Historial libros solicitados.");
         System.out.println("04. Modificar datos.");
-        System.out.println("05. Salir.");
-        return scanner.nextInt();
+        System.out.println("05. Volver.");
+        int opcion = scanner.nextInt();
+        scanner.nextLine();
+        return opcion;
     }
 
     public Double setStars() {
-        System.out.println("De 1 a 5 estrellas, que tal te parecio este libro?");
-        Double estrellas = scanner.nextDouble();
+        Double estrellas = (Double) pedirDouble("De 1 a 5 estrellas, que tal te parecio este libro?");
         scanner.nextLine();
         if (estrellas < 0 || estrellas > 5) {
             System.out.println("Ingrese de 1 a 5 por favor.");
@@ -160,7 +193,6 @@ public class ClienteView {
         System.out.println("* Pass   : " + cliente.getPassword());
         System.out.println("****************************");
     }
-
 
 
 }

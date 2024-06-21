@@ -18,8 +18,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    public BookController() {
-    }
+
 
     public void toListBooks() {
         List<Book> bookList = getListaLibros();
@@ -37,7 +36,7 @@ public class BookController {
 
     public void  terminateBook()//dar de baja logica
     {
-        Integer idBuscar = bookView.pedirEntero("Ingresar id del libro: ");
+        Integer idBuscar = (Integer) bookView.pedirEntero("Ingresar id del libro: ");
 
         Book book = bookRepository.searchLibroId(idBuscar);
 
@@ -61,7 +60,7 @@ public class BookController {
 
     public Book searchBookId()
     {
-        Integer idBuscar = bookView.pedirEntero("Ingresar id del libro: ");
+        Integer idBuscar = (Integer) bookView.pedirEntero("Ingresar id del libro: ");
 
         return bookRepository.searchLibroId(idBuscar);
     }
