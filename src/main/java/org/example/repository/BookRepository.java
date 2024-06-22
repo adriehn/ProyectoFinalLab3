@@ -3,6 +3,7 @@ package org.example.repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Book;
+import org.example.entity.Persona;
 import org.example.exception.MisExcepciones;
 import org.example.repository.implementations.CRUD;
 
@@ -95,6 +96,7 @@ public class BookRepository implements CRUD {
             throw new RuntimeException(e);
         }
     }
+
 
 
 

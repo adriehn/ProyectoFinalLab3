@@ -9,6 +9,7 @@ import org.example.exception.MisExcepciones;
 import org.example.repository.AdminRepository;
 import org.example.repository.BookRepository;
 import org.example.repository.ClienteRepository;
+import org.example.repository.ConfigRepository;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -110,12 +111,16 @@ public class MenuMain {
     }
 
     public void finalizarPrograma() {
+        ConfigRepository.guardarIDPersonas();
+        ConfigRepository.guardarIDBook();
         bookRepository.saveLibros();
         clienteRepository.saveClientes();
         adminRepository.saveAdm();
     }
 
     public void cargarJson() {
+        ConfigRepository.cargarIdPersonas();
+        ConfigRepository.cargarIdBook();
         bookRepository.loadLibros();
         clienteRepository.loadClientes();
         adminController.loadAdm();
