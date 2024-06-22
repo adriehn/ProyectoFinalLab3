@@ -3,6 +3,7 @@ package org.example.repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Book;
+import org.example.entity.Persona;
 import org.example.exception.MisExcepciones;
 import org.example.repository.implementations.CRUD;
 
@@ -13,6 +14,7 @@ import java.util.*;
 public class BookRepository implements CRUD {
 
     private final String BOOK_PATH = "src/main/resources/books.json";
+    private final String PATH_FILE_IDBOOK = "src/main/resources/idBooks.json";
 
     Gson gson = new Gson();
 
@@ -98,5 +100,29 @@ public class BookRepository implements CRUD {
 
 
 
+    public void cargarIdBook() {
+        try (Reader reader = new FileReader(PATH_FILE_IDBOOK)) {
+            Type typelist = new TypeToken<Integer>() {
+            }.getType();
+            Book.setId(gson.fromJson(reader, typelist));
+            if(Book.getId() == null)
+            {
+                Book.setId(0);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.fillInStackTrace());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void guardarIDBook() {
+
+        try (Writer writer = new FileWriter(PATH_FILE_IDBOOK)) {
+            gson.toJson((Integer) Book.getId(), writer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -18,6 +18,17 @@ public class Book {
     private Integer totalRatings; // Total de puntuaciones recibidas
     private Double sumRatings;    // Suma total de todas las puntuaciones asignadas
 
+    public static Integer getId() {
+        return id;
+    }
+
+    public static void setId(Integer id) {
+        Book.id = id;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public boolean isStatus() {
         return status;
