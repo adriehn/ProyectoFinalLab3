@@ -112,7 +112,7 @@ public class MenuMain {
 
     public void finalizarPrograma() {
         ConfigRepository.guardarIDPersonas();
-        bookRepository.guardarIDBook();
+        ConfigRepository.guardarIDBook();
         bookRepository.saveLibros();
         clienteRepository.saveClientes();
         adminRepository.saveAdm();
@@ -120,7 +120,7 @@ public class MenuMain {
 
     public void cargarJson() {
         ConfigRepository.cargarIdPersonas();
-        bookRepository.cargarIdBook();
+        ConfigRepository.cargarIdBook();
         bookRepository.loadLibros();
         clienteRepository.loadClientes();
         adminController.loadAdm();
