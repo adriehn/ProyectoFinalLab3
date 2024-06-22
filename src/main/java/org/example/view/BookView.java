@@ -7,34 +7,29 @@ import org.example.repository.implementations.View;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 public class BookView implements View {
 
     Scanner scanner = new Scanner(System.in);
-    ClienteView clienteView = new ClienteView();
     private final String requestNameBook = "Ingrese el nombre del libro: ";
     private final String requestNameAuthor = "Introduce el autor del libro:";
     private final String requestEditorial = "Introduce la editorial del libro:";
     private final String requestGen = "Introduce el género del libro:";
     private final String requestLanguage = "Introduce el idioma del libro:";
     private final String requestSynopsis = "Introduce la sinopsis del libro:";
-    private final String requestRate = "Introduce la calificación del libro:";
     private final String requestStock = "Introduce el stock del libro:";
-    private final String requestSold = "Introduce el número de libros vendidos:";
 
 
     public Book creatBook() {
         try {
-            String nombreLibro = (String) pedirDato(requestNameBook);
-            String autor = (String) pedirDato(requestNameAuthor);
-            String editorial = (String) pedirDato(requestEditorial);
-            String genero = (String) pedirDato(requestGen);
-            String idioma = (String) pedirDato(requestLanguage);
-            String sinopsis = (String) pedirDato(requestSynopsis);
-            Double calificacion = (Double) pedirDouble(requestRate);
-            Integer stock = (Integer) pedirEntero(requestStock);
-            Integer vendidos = (Integer) pedirEntero(requestSold);
+            String nombreLibro =  pedirDato(requestNameBook);
+            String autor =  pedirDato(requestNameAuthor);
+            String editorial =  pedirDato(requestEditorial);
+            String genero =  pedirDato(requestGen);
+            String idioma =  pedirDato(requestLanguage);
+            String sinopsis =  pedirDato(requestSynopsis);
+            Integer stock =  pedirEntero(requestStock);
+            Integer vendidos =  pedirEntero("Introduce el número de libros vendidos:");
             return new Book(nombreLibro, autor, editorial, genero, idioma, sinopsis, stock, vendidos);
         } catch (InputMismatchException e) {
             System.err.println("Error: Entrada inválida. Por favor, ingresa el tipo de dato correcto.");
@@ -83,48 +78,35 @@ public class BookView implements View {
         System.out.println("4. Género");
         System.out.println("5. Idioma");
         System.out.println("6. Sinopsis");
-        System.out.println("7. Calificación");
-        System.out.println("8. Stock");
-        System.out.println("9. Vendidos");
+        System.out.println("7. Stock");
+        System.out.println("8. Vendidos");
         int opcion = scanner.nextInt();
         scanner.nextLine();  // Limpiar el buffer
 
         switch (opcion) {
             case 1:
-                System.out.println("Nuevo nombre del libro:");
-                libro.setNameBook(scanner.nextLine());
+                libro.setNameBook(pedirDato(requestNameBook));
                 break;
             case 2:
-                System.out.println("Nuevo autor:");
-                libro.setAuthor(scanner.nextLine());
+                libro.setAuthor(pedirDato(requestNameAuthor));
                 break;
             case 3:
-                System.out.println("Nueva editorial:");
-                libro.setPublisher(scanner.nextLine());
+                libro.setPublisher(pedirDato(requestEditorial));
                 break;
             case 4:
-                System.out.println("Nuevo género:");
-                libro.setGenero(scanner.nextLine());
+                libro.setGenero(pedirDato(requestGen));
                 break;
             case 5:
-                System.out.println("Nuevo idioma:");
-                libro.setLanguage(scanner.nextLine());
+                libro.setLanguage(pedirDato(requestLanguage));
                 break;
             case 6:
-                System.out.println("Nueva sinopsis:");
-                libro.setSynopsis(scanner.nextLine());
+                libro.setSynopsis(pedirDato(requestSynopsis));
                 break;
             case 7:
-                System.out.println("Nueva calificación:");
-                libro.setRate(scanner.nextDouble());
+                libro.setStock(pedirEntero(requestStock));
                 break;
             case 8:
-                System.out.println("Nuevo stock:");
-                libro.setStock(scanner.nextInt());
-                break;
-            case 9:
-                System.out.println("Cantidad vendida:");
-                libro.setSold(scanner.nextInt());
+                libro.setSold(pedirEntero(requestStock));
                 break;
             default:
                 System.out.println("Opción no válida.");
@@ -133,7 +115,7 @@ public class BookView implements View {
     }
 
     @Override
-    public Object pedirEntero(Object o) {
+    public Integer pedirEntero(Object o) {
         if (o instanceof String) {
             while (true) {
                 try {
@@ -158,16 +140,14 @@ public class BookView implements View {
     }
 
     @Override
-    public Object pedirDouble(Object o) {
+    public Double pedirDouble(Object o) {
         if (o instanceof String) {
             while (true) {
                 try {
                     System.out.println(o);
                     String input = scanner.nextLine().trim();
 
-                    double numero = Double.parseDouble(input);
-
-                    return numero;
+                     return  Double.parseDouble(input);
                 } catch (NumberFormatException e) {
                     System.err.println("Entrada inválida. Por favor, ingrese un número válido.");
                 }
@@ -177,17 +157,17 @@ public class BookView implements View {
     }
 
     @Override
-    public Object pedirDato(Object o) throws MisExcepciones {
+    public String pedirDato(Object o) throws MisExcepciones {
         String dato = null;
         if (o instanceof String) {
             System.out.println(o);
             dato = scanner.nextLine();
 
-            while (!clienteView.checkInput(dato)) {
+            while (ClienteView.checkInput(dato)) {
                 System.out.println("Reingrese el dato.");
                 dato = scanner.nextLine();
             }
         }
-        return ((String) dato);
+        return dato;
     }
 }

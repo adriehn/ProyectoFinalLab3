@@ -8,5 +8,6 @@ public interface View<T> {
     T pedirDouble(T t);
     T pedirDato(T t)throws MisExcepciones;
 
+
 }
 

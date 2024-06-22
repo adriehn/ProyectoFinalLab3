@@ -1,9 +1,7 @@
 package org.example.controller;
 
-import java.io.IOException;
 import java.util.*;
 
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import org.example.entity.*;
 import org.example.exception.MisExcepciones;
 import org.example.repository.*;
@@ -47,14 +45,25 @@ public class ClienteController implements Controller {
         }
     }
 
+    public void ClearConsole() {
+        for (int i = 0; i < 5; i++) {
+            System.out.println();
+        }
+    }
+
     @Override
     public void inicio(Object obj) {
-        if (obj instanceof Cliente) {
-            Cliente user = (Cliente) obj;
+        if (obj instanceof Cliente user) {
+            user.setUserActive(true);//Ahorramos tiempo al no comprobar, si inicio seccion es porque estara activo.
             boolean exit = false;
             List<Book> libros = bookController.getListaLibros();
 
             for (int i = 0; !exit; ) {
+                ClearConsole();
+
+                int contMensajesNoleidos = checkMessages(user);
+                System.out.println("Tienes (" + contMensajesNoleidos + ") mensajes sin leer");
+                System.out.println();
                 i = restoreIndex(i, libros.size());
                 System.out.println(libros.get(i));
 
@@ -65,9 +74,17 @@ public class ClienteController implements Controller {
                     case 3 -> i = anterior(i);
                     case 4 -> {
                     }
-                    case 5 -> bookController.viewBooks(searchLibro());
-                    case 6 -> perfil(user);
-                    case 7 -> exit = true;
+                    case 5 -> searchLibro(user);
+                    case 6 -> inicio2(user,libros);
+                    case 7 -> {
+                        perfil(user);
+                        if (!user.isUserActive()) {
+                            exit = true;
+                        }
+                    }
+                    case 8 -> mostrarMensajesNoLeidos(user);
+                    case 9 -> viewMesagges(user);
+                    case 10 -> exit = true;
                     default -> System.out.println("Opción invalida");
                 }
                 i++;
@@ -75,27 +92,90 @@ public class ClienteController implements Controller {
         }
     }
 
-    @Override
-    public List<Book> searchLibro() {
-        System.out.printf("Ingrese el nombre del libro: ");
-        String busqueda =  scanner.nextLine();
-        List<Book> librosEncontrados = new ArrayList<>();
-        List<Book> resultados = bookController.getListaLibros();
+    public void inicio2(Cliente user, List<Book> book) {//Este menu recorre la lista aleatoriamente
+        boolean exit = false;
 
-        for (Book libro : resultados) {
-            // Verificar si el nombre o la descripción del producto contiene la palabra de búsqueda
-            if (libro.getNameBook().toLowerCase().contains(busqueda.toLowerCase()) ||
-                    libro.getSynopsis().toLowerCase().contains(busqueda.toLowerCase())) {
-                librosEncontrados.add(libro);
+        // Instanciamos RandomArrayListTraversal con la lista de libros
+        RandomArrayListTraversal randomTraversal = new RandomArrayListTraversal((ArrayList<Book>) book);
+
+        for (; !exit; ) {
+            ClearConsole();
+
+            // Obtenemos el próximo libro aleatorio
+            Book libroActual = randomTraversal.getNextRandomBook();
+            System.out.println(libroActual);
+
+            Integer option = clienteView.opcionesCliente2();
+            switch (option) {
+                case 1 -> tryAddBook(user, libroActual);
+                case 2 -> addBookFav(user, libroActual);
+                case 3 -> {
+                }
+                case 4 -> exit = true;
+                default -> System.out.println("Opción invalida");
             }
         }
 
-        return librosEncontrados;
     }
 
 
+    public int checkMessages(Cliente user) {
+        int cont = 0;
+        for (Messages mensajes : user.getListMessages()) {
+            if (!mensajes.isRead()) {
+                cont++;
+            }
+        }
+        return cont;
+    }
 
 
+    @Override
+    public void searchLibro(Object object) {
+        if (object instanceof Cliente) {
+            ClearConsole();
+            System.out.print("Ingrese el nombre del libro: ");
+            String busqueda = scanner.nextLine();
+            List<Book> librosEncontrados = new ArrayList<>();
+            List<Book> resultados = bookController.getListaLibros();
+
+            for (Book libro : resultados) {
+                // Verificar si el nombre o la descripción del producto contiene la palabra de búsqueda
+                if (libro.getNameBook().toLowerCase().contains(busqueda.toLowerCase()) ||
+                        libro.getSynopsis().toLowerCase().contains(busqueda.toLowerCase())) {
+                    librosEncontrados.add(libro);
+                }
+            }
+            checkEmptySearch(librosEncontrados, (Cliente) object);
+            ClearConsole();
+        }
+
+
+    }
+
+    public void checkEmptySearch(List<Book> librosEncontrados, Cliente user) {
+        if (librosEncontrados.isEmpty()) {
+            System.out.println(clienteView.searchBook);
+        } else {
+            for (Book librosEncontrado : librosEncontrados) {
+                System.out.println(librosEncontrado);
+                optionsSearchBook(user, librosEncontrado);
+            }
+        }
+
+    }
+
+    public void optionsSearchBook(Cliente user, Book libro) {
+
+        int option = clienteView.opcionesSearchBook();
+        switch (option) {
+            case 1 -> tryAddBook(user, libro);
+            case 2 -> addBookFav(user, libro);
+            case 3 -> {
+            }
+        }
+
+    }
 
     public int restoreIndex(int i, int size) {
         if (i >= size) {
@@ -134,9 +214,7 @@ public class ClienteController implements Controller {
     }
 
     public void deleteFav(Cliente user, Book libro) {
-        if (user.getListFavBook().contains(libro)) {
-            user.getListFavBook().remove(libro);
-        }
+        user.getListFavBook().remove(libro);
     }
 
     public void addBookFav(Cliente user, Book libro) {
@@ -153,34 +231,39 @@ public class ClienteController implements Controller {
     }
 
     public void perfil(Cliente user) {
-        boolean exit = false;
+        boolean exit = true;
 
-        while (!exit) {
+        while (exit) {
+            ClearConsole();
+
             Integer option = clienteView.opcionesLibrosClientes();
             switch (option) {
                 case 1 -> verLibrosSolicitados(user);
                 case 2 -> verLibrosFavoritos(user);
                 case 3 -> verHistorialSolicitados(user);
-                case 4 -> modificarCliente(user);
-                case 5 -> exit = true;
+                case 4 -> exit = modificarCliente(user);
+                case 5 -> exit = false;
             }
         }
     }
 
-    public void modificarCliente(Cliente user) {
+    public boolean modificarCliente(Cliente user) {
         boolean exit = true;
         while (exit) {
             exit = setUpdate(user, clienteView.modificarCliente(user));
         }
+        return exit;
     }
 
     public boolean setUpdate(Cliente user, int opcion) {
         switch (opcion) {
-            case 1 -> user.setName((String) clienteView.pedirDato(clienteView.requestNameMessage));
-            case 2 -> user.setLastName((String) clienteView.pedirDato(clienteView.requestlastNameMessage));
-            case 3 -> user.setEmail((String) clienteView.pedirDato(clienteView.requestEmailMessage));
-            case 4 -> user.setAdress((String) clienteView.pedirDato(clienteView.requestAddressMessage));
-            case 5 -> {
+            case 1 -> user.setName(clienteView.pedirDato(clienteView.requestNameMessage));
+            case 2 -> user.setLastName(clienteView.pedirDato(clienteView.requestlastNameMessage));
+            case 3 -> user.setAge(clienteView.pedirEntero(clienteView.requestAge));
+            case 4 -> user.setEmail(clienteView.pedirDato(clienteView.requestEmailMessage));
+            case 5 -> user.setAdress(clienteView.pedirDato(clienteView.requestAddressMessage));
+            case 6 -> user.setPhone(clienteView.pedirDato(clienteView.requestPhoneMessage));
+            case 7 -> {
                 try {
                     user.setPassword(changePassword(user));
                     System.out.println(clienteView.changePassOK);
@@ -188,17 +271,24 @@ public class ClienteController implements Controller {
                     System.out.println(e.getMessage());
                 }
             }
-            case 6 -> {
+            case 8 -> {
+                user.setUserActive(clienteView.checkDownAccount());
+                if (!user.isUserActive()) {
+                    return false;
+                }
+            }
+            case 9 -> {
                 return false;
             }
         }
         clienteRepository.update(user);
+        scanner.nextLine();
         return true;
     }
 
     public String changePassword(Cliente user) {
         if (clienteView.pedirDato(clienteView.requestPasswordMessage).equals(user.getPassword())) {
-            return (String) clienteView.pedirDato(clienteView.requestPasswordMessage2);
+            return clienteView.pedirDato(clienteView.requestPasswordMessage2);
         } else {
             throw MisExcepciones.wrongPassword();
         }
@@ -210,7 +300,6 @@ public class ClienteController implements Controller {
         for (int i = 0; i < solicitados.size(); i++) {
 
             bookController.viewBook(solicitados.get(i));
-
             System.out.println("01. Devolver? s/n.");
             String choice = scanner.nextLine();
 
@@ -220,9 +309,10 @@ public class ClienteController implements Controller {
                 setStars(solicitados.get(i));
                 solicitados.remove(i); // Eliminar el elemento actual de manera segura
                 i--; // Ajustar el índice después de la eliminación
+            } else {
+                ClearConsole();
             }
         }
-
     }
 
     public void devolution(Cliente user, Book b) {
@@ -236,20 +326,47 @@ public class ClienteController implements Controller {
 
     public void verLibrosFavoritos(Cliente user) {
         List<Book> list = new ArrayList<>(user.getListFavBook());
-        bookController.viewBooks(list);
+        if (list.isEmpty()) {
+            System.out.println(clienteView.searchBook);
+            scanner.nextLine();
+        } else {
+            bookController.viewBooks(list);
+            scanner.nextLine();
+        }
+
     }
 
     public void verHistorialSolicitados(Cliente user) {
-        // Obtener el historial de devoluciones como un mapa
-        Map<Integer, Book> historial = user.getReturnHistory();
-
-        // Convertir los valores del mapa en una lista
-        List<Book> bookList = new ArrayList<>(historial.values());
-
-        // Llamar al método viewBooks con la lista de libros
-        bookController.viewBooks(bookList);
+        List<Book> bookList = new ArrayList<>(user.getReturnHistory().values());// Obtener el historial de devoluciones y Convertir los valores del mapa en una lista
+        bookController.viewBooks(bookList);// Llamar al método viewBooks con la lista de libros
+        scanner.nextLine();
     }
 
+    //////////////////////////////////////////////////////////////////////////////////
+    // Metodos que trabajan con mensajeria
+    public void mostrarMensajesNoLeidos(Cliente cliente) {
+        for (Messages mensaje : cliente.getListMessages()) {
+            if (!mensaje.isRead()) {
+                System.out.println(mensaje.getContent());
+                scanner.nextLine();
+                mensaje.Mark_AsRead();
+            }
+        }
+        clienteRepository.saveClientes();
+
+    }
+
+    public void recibirMensaje(Cliente cliente, Messages mensaje) {
+        cliente.getListMessages().add(mensaje);
+    }
+
+    public void viewMesagges(Cliente cliente) {
+        for (Messages mensaje : cliente.getListMessages()) {
+            System.out.println(mensaje.getContent());
+            scanner.nextLine();
+        }
+        clienteRepository.saveClientes();
+    }
 
     public void createPersona() {
 
@@ -260,10 +377,10 @@ public class ClienteController implements Controller {
         if (!check) {
             if (config.getAdminPassword().equalsIgnoreCase(newcliente.getPassword())) {//Verificamos si la contraseña es la predefinida para registrar un nuevo admin
 
-                System.out.println(ClienteView.admMessage);
-                String newPassword = (String) clienteView.pedirDato(clienteView.requestPasswordMessage);
-                String department = (String) clienteView.pedirDato(clienteView.requestDepartmentMessage);
-                String speciality = (String) clienteView.pedirDato(clienteView.requestSpecialityMessage);
+                System.out.println(clienteView.admMessage);
+                String newPassword = clienteView.pedirDato(clienteView.requestPasswordMessage);
+                String department = clienteView.pedirDato(clienteView.requestDepartmentMessage);
+                String speciality = clienteView.pedirDato(clienteView.requestSpecialityMessage);
 
                 adminRepository.Register(new Admin(newcliente.getDni(), newcliente.getName(), newcliente.getLastName(), newcliente.getAge(), newcliente.getEmail(), newcliente.getPhone(), newcliente.getAdress(), newPassword, true, department, speciality));
 
@@ -274,6 +391,8 @@ public class ClienteController implements Controller {
         } else {
             System.out.println(clienteView.dniExistente);
         }
+
+
     }
 
 

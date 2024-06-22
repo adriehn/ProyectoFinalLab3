@@ -79,8 +79,8 @@ public class ClienteRepository implements CRUD, Logueo {
     }
 
     @Override
-    public Object read(Object o) {
-        return null;
+    public Map<String, Cliente> read(Object o) {
+        return mapClientes;
     }
 
     @Override
@@ -88,6 +88,7 @@ public class ClienteRepository implements CRUD, Logueo {
 
         if (o instanceof Cliente) {
             System.out.println("Actualizado Correctamente.");
+
             saveClientes();
         }
         return o;

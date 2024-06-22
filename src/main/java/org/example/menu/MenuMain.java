@@ -21,11 +21,11 @@ public class MenuMain {
     private final BookRepository bookRepository = new BookRepository();
     private final BookController bookController = new BookController(bookRepository);
     public AdminRepository adminRepository = new AdminRepository();
-    public AdminController adminController = new AdminController(adminRepository,bookController);
+    public AdminController adminController = new AdminController(adminRepository, bookController);
     public final String requestDniMessage = "Ingrese su numero de DNI (sin puntos, ni coma): ";
     public static final String requestPasswordMessage = "Ingrese su contraseña: ";
-    public MenuMain(AdminController adminController)
-    {
+
+    public MenuMain(AdminController adminController) {
         this.adminController = adminController;
         cargarJson();
     }
@@ -34,7 +34,7 @@ public class MenuMain {
     public MenuMain() {
     }
 
-    public void mainFlow() {
+    public void mainFlow() {///Primer vista de menu que se ejecuta
         boolean exit = false;
 
         cargarJson();
@@ -62,22 +62,25 @@ public class MenuMain {
 
         finalizarPrograma();
     }
+
     private void loginFlow() {//Inicio session cliente
         System.out.println(requestDniMessage);
         String userDniInput = scanner.nextLine();
         System.out.println(requestPasswordMessage);
         String passwordInput = scanner.nextLine();
 
-        try{
+        ///una forma de usar el Optional, si el objeto Optional tiene un objeto Cliente, se jecuta la accion de ir al "inicio"
+        ///si no ejecuta la excepcion y el catch la captura
+        try {
             Optional<Cliente> user = clienteController.login(userDniInput, passwordInput);
-            user.ifPresentOrElse(Cliente -> clienteController.inicio(Cliente),()->MisExcepciones.usuarioNoEncontrado());
-        }
-        catch (MisExcepciones e)
-        {
-            System.out.printf(e.getLocalizedMessage() );
+            user.ifPresentOrElse(Cliente -> clienteController.inicio(Cliente), () -> MisExcepciones.usuarioNoEncontrado());
+        } catch (MisExcepciones e) {
+            System.out.printf(e.getLocalizedMessage());
         }
 
     }
+
+
 
     private void loginFlowAdm() {
         System.out.println(requestDniMessage);
@@ -85,13 +88,15 @@ public class MenuMain {
         System.out.println(requestPasswordMessage);
         String passwordInput = scanner.nextLine();
 
+        //Otra forma de usar Optional, se le consulta a Optional si dentro de su objeto contiene algo de tipo Admin
+        ///si el booleano es true, se realizan las acciones del if.
         try {
             Optional<Admin> admin = adminController.login(userDniInput, passwordInput);
             if (admin.isPresent()) {
                 Admin a = admin.get();
                 adminController.inicio(a);
             } else {
-                throw new MisExcepciones("Usuario no encontrado");
+                MisExcepciones.usuarioNoEncontrado();
             }
         } catch (MisExcepciones e) {
             System.out.println(e.getMessage());

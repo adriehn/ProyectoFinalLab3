@@ -6,6 +6,6 @@ public interface Controller<T> {
     Optional<T> login (String dni, String password);
     void inicio (T t);
 
-    T searchLibro();
+    void searchLibro(T t);
 
 }
