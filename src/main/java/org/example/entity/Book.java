@@ -26,9 +26,6 @@ public class Book {
         Book.id = id;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 
     public boolean isStatus() {
         return status;

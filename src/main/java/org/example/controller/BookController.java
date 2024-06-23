@@ -10,8 +10,8 @@ import java.util.List;
 
 public class BookController {
 
-    BookRepository bookRepository;
-    BookView bookView = new BookView();
+    private final BookRepository bookRepository;
+    private final BookView bookView = new BookView();
 
     public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -65,8 +65,7 @@ public class BookController {
     ///Case 2 del inicio del Administrador.
     public void editBook() {
         Book bookEdit = searchBookId();
-        if(bookEdit != null)
-        {
+        if (bookEdit != null) {
             boolean exit = true;
             while (exit) {
                 exit = bookView.editarLibro(bookEdit);

@@ -7,31 +7,7 @@ import org.example.repository.implementations.View;
 import java.util.Scanner;
 
 public class ClienteView implements View {
-
-    public final String requestNameMessage = "\nIngrese su nombre: ";
-    public final String requestDniMessage = "\nIngrese su numero de DNI (sin puntos, ni coma): ";
-    public final String requestlastNameMessage = "\nIngrese su apellido: ";
-    public final String requestEmailMessage = "\nIngrese su email: ";
-    public final String requestPhoneMessage = "\nIngrese su numero de teléfono: ";
-    public final String requestAddressMessage = "\nIngrese su direccion: ";
-    public final String requestAge = "\nIngrese su edad: ";
-    public final String requestPasswordMessage = "\nIngrese su contraseña: ";
-    public final String requestPasswordMessage2 = "\nIngrese su nueva contraseña: ";
-    public final String requestDepartmentMessage = "\nIngrese su departamento: ";
-    public final String requestSpecialityMessage = "\nIngrese su especialidad: ";
-
-    public final String registerOK = "\nRegistrado exitosamente!\n";
-    public final String dniExistente = "\nEl DNI ingresado ya posee una cuenta.\n";
-    public final String addFav = "\nSe ha agregado a sus favoritos.\n";
-    public final String addBookError = "\nActualmente ya tiene una copia en su poder.\n";
-    public final String changePassOK = "\nSu contraseña se ha actualizado correctamente.\n";
-    public final String searchBook = "\nNo se encontraron coincidencias.\n";
-    public final String addedBorrowedBook = "\nSe ha reservado el libro correctamente.\n";
-    public final String redundantFav = "\n\"El libro esta en su posesion, es redundante agregar a sus favoritos\"\n";
-
-    Scanner scanner = new Scanner(System.in);
-
-
+    private final Scanner scanner = new Scanner(System.in);
     public Integer opcionesCliente() {
         System.out.println("01. Solicitar.");
         System.out.println("02. Agregar a Favoritos");

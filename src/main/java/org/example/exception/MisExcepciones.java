@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class MisExcepciones extends RuntimeException {
 
-    private static Scanner scanner = new Scanner(System.in);
 
     public MisExcepciones(String message) {
         super(message);
@@ -16,10 +15,6 @@ public class MisExcepciones extends RuntimeException {
 
     public static MisExcepciones usuarioNoEncontrado() {
         throw new MisExcepciones("\n\nEl usuario no existe.\n\n");
-    }
-
-    public static MisExcepciones dniExistente() {
-        return new MisExcepciones("\n\nEl DNI ya tiene una cuenta asociada.\n\n");
     }
 
     public static MisExcepciones libroSinStock() {

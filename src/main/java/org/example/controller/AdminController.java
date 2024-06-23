@@ -7,15 +7,16 @@ import org.example.repository.ClienteRepository;
 import org.example.repository.implementations.Controller;
 import org.example.view.AdminView;
 import org.example.view.ClienteView;
+import org.example.view.PersonaView;
 
 import java.util.*;
 
 public class AdminController implements Controller<Admin> {
     private final AdminRepository adminRepository;
-    AdminView adminView = new AdminView();
-    BookController bookController;
-    ClienteRepository clienteRepository = new ClienteRepository();
-    ClienteController clienteController = new ClienteController();
+    private final AdminView adminView = new AdminView();
+    private BookController bookController;
+    private final ClienteRepository clienteRepository = new ClienteRepository();
+    private final ClienteController clienteController = new ClienteController();
     private final ClienteView clienteView = new ClienteView();
 
     public AdminController(AdminRepository adminRepository, BookController bookController) {
@@ -89,16 +90,16 @@ public class AdminController implements Controller<Admin> {
             adminView.displayInfo(user);
             Integer opcion = adminView.modifyObject(null);
             switch (opcion) {
-                case 1 -> user.setName(adminView.pedirDato(clienteView.requestNameMessage));
-                case 2 -> user.setLastName(adminView.pedirDato(clienteView.requestlastNameMessage));
-                case 3 -> user.setAge(adminView.pedirEntero(clienteView.requestAge));
-                case 4 -> user.setEmail(adminView.pedirDato(clienteView.requestEmailMessage));
-                case 5 -> user.setAdress(adminView.pedirDato(clienteView.requestAddressMessage));
-                case 6 -> user.setPhone(adminView.pedirDato(clienteView.requestPhoneMessage));
+                case 1 -> user.setName(adminView.pedirDato(PersonaView.requestNameMessage));
+                case 2 -> user.setLastName(adminView.pedirDato(PersonaView.requestlastNameMessage));
+                case 3 -> user.setAge(adminView.pedirEntero(PersonaView.requestAge));
+                case 4 -> user.setEmail(adminView.pedirDato(PersonaView.requestEmailMessage));
+                case 5 -> user.setAdress(adminView.pedirDato(PersonaView.requestAddressMessage));
+                case 6 -> user.setPhone(adminView.pedirDato(PersonaView.requestPhoneMessage));
                 case 7 -> {
                     try {
                         user.setPassword(changePassword(user));
-                        System.out.println(clienteView.changePassOK);
+                        System.out.println(PersonaView.changePassOK);
                     } catch (MisExcepciones e) {
                         System.out.println(e.getMessage());
                     }
@@ -121,8 +122,8 @@ public class AdminController implements Controller<Admin> {
 
     public String changePassword(Admin user) {
         ///metodo que para modificar la contraseña debe ingresar su contraseña actual
-        if (adminView.pedirDato(clienteView.requestPasswordMessage).equals(user.getPassword())) {
-            return adminView.pedirDato(clienteView.requestPasswordMessage2);
+        if (adminView.pedirDato(PersonaView.requestPasswordMessage).equals(user.getPassword())) {
+            return adminView.pedirDato(PersonaView.requestPasswordMessage2);
         } else {
             throw MisExcepciones.wrongPassword();
         }

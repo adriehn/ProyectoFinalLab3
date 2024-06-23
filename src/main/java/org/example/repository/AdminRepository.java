@@ -9,6 +9,7 @@ import org.example.exception.MisExcepciones;
 import org.example.repository.implementations.CRUD;
 import org.example.repository.implementations.Logueo;
 import org.example.view.ClienteView;
+import org.example.view.PersonaView;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -19,13 +20,11 @@ public class AdminRepository implements CRUD, Logueo {
     private final String ADM_PATH = "src/main/resources/administrativos.json";
     private final Gson gson = new Gson();
     private final ClienteView clienteView = new ClienteView();
-
     public static Map<String, Admin> mapAdm;
 
     public AdminRepository() {
         this.mapAdm = new TreeMap<>();
     }
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,10 +70,10 @@ public class AdminRepository implements CRUD, Logueo {
                     personaObj.getEmail(),
                     personaObj.getPhone(),
                     personaObj.getAdress(),
-                    clienteView.pedirDato(clienteView.requestPasswordMessage),
+                    clienteView.pedirDato(PersonaView.requestPasswordMessage),
                     true,
-                    clienteView.pedirDato(clienteView.requestDepartmentMessage),
-                    clienteView.pedirDato(clienteView.requestSpecialityMessage)
+                    clienteView.pedirDato(PersonaView.requestDepartmentMessage),
+                    clienteView.pedirDato(PersonaView.requestSpecialityMessage)
             );
             admin.setIdPersona(personaObj.getIdPersona());
             Register(admin);
@@ -82,9 +81,10 @@ public class AdminRepository implements CRUD, Logueo {
         } else {
             throw new IllegalArgumentException("El objeto no es una instancia de Admin o Persona");
         }
-        Persona.setId(Persona.getId()-1);
+        Persona.setId(Persona.getId() - 1);
 
     }
+
     @Override
     public Map<String, Admin> read(Object o) {
         return mapAdm;

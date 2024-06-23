@@ -83,10 +83,6 @@ public class Persona {
         this.password = password;
     }
 
-    public boolean isRol() {
-        return rol;
-    }
-
     public void setRol(boolean rol) {
         this.rol = rol;
     }
@@ -126,8 +122,6 @@ public class Persona {
 
     public void setUserActive(boolean userActive) {
         this.userActive = userActive;
-    }
-    public Persona() {
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.example.repository.BookRepository;
 import org.example.repository.ClienteRepository;
 import org.example.repository.implementations.Controller;
 import org.example.view.ClienteView;
+import org.example.view.PersonaView;
 
 
 public class ClienteController implements Controller {
@@ -18,7 +19,7 @@ public class ClienteController implements Controller {
     private final ClienteView clienteView = new ClienteView();
     private final ClienteRepository clienteRepository = new ClienteRepository();
 
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     public ClienteController() {
     }
@@ -131,7 +132,7 @@ public class ClienteController implements Controller {
             addBook(user, libro);
         } catch (MisExcepciones e) {
             System.out.println(e.getMessage());
-            System.out.println(clienteView.addFav);
+            System.out.println(PersonaView.addFav);
         }
         scanner.nextLine();
 
@@ -146,9 +147,9 @@ public class ClienteController implements Controller {
                 libro.setStock(libro.getStock() - 1);//se descuenta el stock en 1 unidad
                 deleteFav(user, libro); //Si el libro solicitado esta en sus Favoritos , es eliminado
                 bookRepository.saveBooks(); //se guardan los libros para persistir el nuevo stock
-                System.out.println(clienteView.addedBorrowedBook);
+                System.out.println(PersonaView.addedBorrowedBook);
             } else {
-                System.out.println(clienteView.addBookError);
+                System.out.println(PersonaView.addBookError);
                 scanner.nextLine();
             }
         } else {
@@ -170,7 +171,7 @@ public class ClienteController implements Controller {
         }
         else
         {
-            System.out.println(clienteView.redundantFav);
+            System.out.println(PersonaView.redundantFav);
             scanner.nextLine();
         }
     }
@@ -212,7 +213,7 @@ public class ClienteController implements Controller {
     public void checkEmptySearch(List<Book> librosEncontrados, Cliente user) {
         //Metodo para verificar que la lista no este vacia, sino lo esta, se muestra de a uno y despliegan opciones.
         if (librosEncontrados.isEmpty()) {
-            System.out.println(clienteView.searchBook);
+            System.out.println(PersonaView.searchBook);
         } else {
             for (Book librosEncontrado : librosEncontrados) {
                 System.out.println(librosEncontrado);
@@ -317,7 +318,7 @@ public class ClienteController implements Controller {
     public void seeBooksFavorites(Cliente user) {
         List<Book> list = new ArrayList<>(user.getListFavBook());
         if (list.isEmpty()) {
-            System.out.println(clienteView.searchBook);
+            System.out.println(PersonaView.searchBook);
             scanner.nextLine();
         } else {
             bookController.viewBooks(list);
@@ -349,16 +350,16 @@ public class ClienteController implements Controller {
             ///Metodo practico para actualizar algun dato o desactivar la cuenta temporalmente
             ///Nos basamos en la logica que un objeto no debe eliminarse, sino desactivarse mediante algun atributo que haga de switch
             ///y poder reactivarse cuando se solicite, siendo que el dni (dato unico) es la key del Map donde se almacenan las Personas
-            case 1 -> user.setName(clienteView.pedirDato(clienteView.requestNameMessage));
-            case 2 -> user.setLastName(clienteView.pedirDato(clienteView.requestlastNameMessage));
-            case 3 -> user.setAge(clienteView.pedirEntero(clienteView.requestAge));
-            case 4 -> user.setEmail(clienteView.pedirDato(clienteView.requestEmailMessage));
-            case 5 -> user.setAdress(clienteView.pedirDato(clienteView.requestAddressMessage));
-            case 6 -> user.setPhone(clienteView.pedirDato(clienteView.requestPhoneMessage));
+            case 1 -> user.setName(clienteView.pedirDato(PersonaView.requestNameMessage));
+            case 2 -> user.setLastName(clienteView.pedirDato(PersonaView.requestlastNameMessage));
+            case 3 -> user.setAge(clienteView.pedirEntero(PersonaView.requestAge));
+            case 4 -> user.setEmail(clienteView.pedirDato(PersonaView.requestEmailMessage));
+            case 5 -> user.setAdress(clienteView.pedirDato(PersonaView.requestAddressMessage));
+            case 6 -> user.setPhone(clienteView.pedirDato(PersonaView.requestPhoneMessage));
             case 7 -> {
                 try {
                     user.setPassword(changePassword(user));
-                    System.out.println(clienteView.changePassOK);
+                    System.out.println(PersonaView.changePassOK);
                 } catch (MisExcepciones e) {
                     System.out.println(e.getMessage());
                 }
@@ -380,8 +381,8 @@ public class ClienteController implements Controller {
 
     public String changePassword(Cliente user) {
         ///metodo que para modificar la contraseña debe ingresar su contraseña actual
-        if (clienteView.pedirDato(clienteView.requestPasswordMessage).equals(user.getPassword())) {
-            return clienteView.pedirDato(clienteView.requestPasswordMessage2);
+        if (clienteView.pedirDato(PersonaView.requestPasswordMessage).equals(user.getPassword())) {
+            return clienteView.pedirDato(PersonaView.requestPasswordMessage2);
         } else {
             throw MisExcepciones.wrongPassword();
         }

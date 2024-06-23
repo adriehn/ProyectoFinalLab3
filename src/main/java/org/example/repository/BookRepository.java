@@ -14,7 +14,7 @@ public class BookRepository implements CRUD {
 
     private final String BOOK_PATH = "src/main/resources/books.json";
 
-    Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     public static List<Book> listaLibros = new ArrayList<>();
 
@@ -26,11 +26,6 @@ public class BookRepository implements CRUD {
     public List<Book> getListaLibros() {
         return listaLibros;
     }
-
-    public void setListaLibros(List<Book> listaLibros) {
-        this.listaLibros = listaLibros;
-    }
-
 
     public void addList(Book libro) {
         listaLibros.add(libro);

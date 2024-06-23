@@ -4,10 +4,10 @@ import java.util.*;
 
 public class Cliente extends Persona {
 
-    private ArrayList<Book> currentlyBorrowedBook;//
-    private Map<Integer, Book> returnHistory;
-    private Set<Book> listFavBook;
-    private List<Messages> listMessages;
+    private final ArrayList<Book> currentlyBorrowedBook;//
+    private final Map<Integer, Book> returnHistory;
+    private final Set<Book> listFavBook;
+    private final List<Messages> listMessages;
 
 
     public Cliente(String dni, String name, String lastName, Integer age, String email, String phone, String address, String password, boolean rol) {
@@ -28,25 +28,17 @@ public class Cliente extends Persona {
         return currentlyBorrowedBook;
     }
 
-    public void setCurrentlyBorrowedBook(ArrayList<Book> currentlyBorrowedBook) {
-        this.currentlyBorrowedBook = currentlyBorrowedBook;
-    }
+
 
     public Map<Integer, Book> getReturnHistory() {
         return returnHistory;
     }
 
-    public void setReturnHistory(Map<Integer, Book> returnHistory) {
-        this.returnHistory = returnHistory;
-    }
 
     public Set<Book> getListFavBook() {
         return listFavBook;
     }
 
-    public void setListFavBook(Set<Book> listFavBook) {
-        this.listFavBook = listFavBook;
-    }
 
     @Override
     public String toString() {

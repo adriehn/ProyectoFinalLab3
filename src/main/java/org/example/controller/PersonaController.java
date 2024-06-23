@@ -31,9 +31,9 @@ public class PersonaController {
             } else {
                 clienteController.createClient(newUser);
             }
-            System.out.println(clienteView.registerOK);
+            System.out.println(PersonaView.registerOK);
         } else {
-            System.out.println(clienteView.dniExistente);
+            System.out.println(PersonaView.dniExistente);
             //ajustamos el id estatico para mantener un id real en base a cuantos usuarios se guardaron realmente
             //Porque al instanciar un objeto con un dni existente, el id aumentaba igual.
             Persona.setId(Persona.getId()-1);
