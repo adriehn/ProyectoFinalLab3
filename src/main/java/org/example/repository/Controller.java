@@ -1,4 +1,4 @@
-package org.example.repository.implementations;
+package org.example.repository;
 import java.util.Optional;
 
 public interface Controller<T> {

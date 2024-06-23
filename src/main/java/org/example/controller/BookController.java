@@ -2,7 +2,7 @@ package org.example.controller;
 
 import org.example.entity.Book;
 import org.example.exception.MisExcepciones;
-import org.example.repository.BookRepository;
+import org.example.repository.implementations.BookRepository;
 import org.example.view.BookView;
 
 import java.util.List;

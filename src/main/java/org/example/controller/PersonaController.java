@@ -1,8 +1,8 @@
 package org.example.controller;
 
 import org.example.entity.*;
-import org.example.repository.AdminRepository;
-import org.example.repository.ConfigRepository;
+import org.example.repository.implementations.AdminRepository;
+import org.example.repository.implementations.ConfigRepository;
 import org.example.view.AdminView;
 import org.example.view.ClienteView;
 import org.example.view.PersonaView;

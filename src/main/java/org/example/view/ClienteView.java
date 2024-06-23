@@ -2,11 +2,13 @@ package org.example.view;
 
 import org.example.entity.Cliente;
 import org.example.exception.MisExcepciones;
-import org.example.repository.implementations.View;
+import org.example.repository.View;
 
 import java.util.Scanner;
 
 public class ClienteView implements View {
+
+    public final String newMessagesEmpty = "\nNo posee mensajes por leer.\n";
     private final Scanner scanner = new Scanner(System.in);
     public Integer opcionesCliente() {
         System.out.println("01. Solicitar.");
@@ -20,7 +22,9 @@ public class ClienteView implements View {
         System.out.println("09. Ver todos los mensajes.");
         System.out.println("10. Cerrar Session..");
         System.out.print("Ingresar opcion: ");
-        return scanner.nextInt();
+        int opcion = scanner.nextInt();
+        scanner.nextLine();
+        return opcion;
     }
 
     public Integer opcionesCliente2() {
@@ -49,6 +53,7 @@ public class ClienteView implements View {
         System.out.println("03. Ver Historial libros solicitados.");
         System.out.println("04. Modificar datos.");
         System.out.println("05. Volver.");
+        System.out.print("Ingresar opcion: ");
         int opcion = scanner.nextInt();
         scanner.nextLine();
         return opcion;

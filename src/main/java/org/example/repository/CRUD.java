@@ -1,4 +1,4 @@
-package org.example.repository.implementations;
+package org.example.repository;
 
 public interface CRUD<T> {
 

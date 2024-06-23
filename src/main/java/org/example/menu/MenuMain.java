@@ -7,10 +7,9 @@ import org.example.controller.PersonaController;
 import org.example.entity.Admin;
 import org.example.entity.Cliente;
 import org.example.exception.MisExcepciones;
-import org.example.repository.AdminRepository;
-import org.example.repository.BookRepository;
-import org.example.repository.ClienteRepository;
-import org.example.repository.ConfigRepository;
+import org.example.repository.implementations.AdminRepository;
+import org.example.repository.implementations.BookRepository;
+import org.example.repository.implementations.ConfigRepository;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -41,8 +40,8 @@ public class MenuMain {
                     1. Loguearse
                     2. Loguearse como ADM
                     3. Registrarse
-                    4. Salir
-                    """;
+                    4. Salir""";
+            System.out.print("Ingresar opcion: ");
             System.out.println(loginMenu);
             int menuOption = scanner.nextInt();
             scanner.nextLine();

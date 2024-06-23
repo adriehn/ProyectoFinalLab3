@@ -20,4 +20,9 @@ public class Messages {
     public void Mark_AsRead() {
         this.read = true;
     }
+
+    @Override
+    public String toString() {
+        return "Mensaje recibido: " + content + '\'' ;
+    }
 }
