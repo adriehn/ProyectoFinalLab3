@@ -17,6 +17,7 @@ public class ConfigRepository {
     private static Config config;
     private static Gson gson = new Gson();
 
+    ///Devuelve la contraseña pre establecida para el administrador cuando se la solicita al crear un usuario
     public static Config loadConfig() {
         if (config == null) {
             try (Reader reader = new FileReader(CONFIG_FILE_PATH)) {
@@ -29,7 +30,7 @@ public class ConfigRepository {
         return config;
     }
 
-    public static void cargarIdPersonas() {
+    public static void loadIdPersonas() {
         try (Reader reader = new FileReader(PATH_FILE_ID)) {
             Type typelist = new TypeToken<Integer>() {
             }.getType();
@@ -46,7 +47,7 @@ public class ConfigRepository {
         }
     }
 
-    public static void guardarIDPersonas() {
+    public static void saveIDPersonas() {
 
         try (Writer writer = new FileWriter(PATH_FILE_ID)) {
             gson.toJson((Integer) Persona.getId(), writer);
@@ -54,7 +55,7 @@ public class ConfigRepository {
             throw new RuntimeException(e);
         }
     }
-    public static void cargarIdBook() {
+    public static void loadIdBook() {
         try (Reader reader = new FileReader(PATH_FILE_IDBOOK)) {
             Type typelist = new TypeToken<Integer>() {
             }.getType();
@@ -70,7 +71,7 @@ public class ConfigRepository {
         }
     }
 
-    public static void guardarIDBook() {
+    public static void saveIDBook() {
 
         try (Writer writer = new FileWriter(PATH_FILE_IDBOOK)) {
             gson.toJson((Integer) Book.getId(), writer);

@@ -32,7 +32,7 @@ public class RegisterFrame extends JFrame {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-                menuMain.clienteController.createPersona();
+                //menuMain.clienteController.createPersona();
                 JOptionPane.showMessageDialog(panel, "Registrado exitosamente!", "Registro", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
