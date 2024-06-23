@@ -3,6 +3,7 @@ package org.example.menu;
 import org.example.controller.AdminController;
 import org.example.controller.BookController;
 import org.example.controller.ClienteController;
+import org.example.controller.PersonaController;
 import org.example.entity.Admin;
 import org.example.entity.Cliente;
 import org.example.exception.MisExcepciones;
@@ -17,19 +18,16 @@ import java.util.Scanner;
 public class MenuMain {
     private final Scanner scanner = new Scanner(System.in);
     public final ClienteController clienteController = new ClienteController();
-    private final ClienteRepository clienteRepository = new ClienteRepository();
 
     private final BookRepository bookRepository = new BookRepository();
     private final BookController bookController = new BookController(bookRepository);
-    public AdminRepository adminRepository = new AdminRepository();
-    public AdminController adminController = new AdminController(adminRepository, bookController);
+    private final AdminRepository adminRepository = new AdminRepository();
+    public final AdminController adminController = new AdminController(adminRepository, bookController);
     public final String requestDniMessage = "Ingrese su numero de DNI (sin puntos, ni coma): ";
     public static final String requestPasswordMessage = "Ingrese su contraseña: ";
 
-    public MenuMain(AdminController adminController) {
-        this.adminController = adminController;
-        cargarJson();
-    }
+    private final PersonaController personaController = new PersonaController();
+
 
 
     public MenuMain() {
@@ -38,7 +36,6 @@ public class MenuMain {
     public void mainFlow() {///Primer vista de menu que se ejecuta
         boolean exit = false;
 
-        cargarJson();
 
         while (!exit) {
             String loginMenu = """
@@ -61,7 +58,6 @@ public class MenuMain {
             }
         }
 
-        finalizarPrograma();
     }
 
     private void loginFlow() {//Inicio session cliente
@@ -105,25 +101,23 @@ public class MenuMain {
     }
 
     private void registerFlow() {
-
-        clienteController.createPersona();
-
+        personaController.createPersona();
     }
 
     public void finalizarPrograma() {
-        ConfigRepository.guardarIDPersonas();
-        ConfigRepository.guardarIDBook();
-        bookRepository.saveLibros();
-        clienteRepository.saveClientes();
-        adminRepository.saveAdm();
+        bookController.saveBooks();
+        clienteController.saveClientes();
+        adminController.saveAdm();
+        ConfigRepository.saveIDPersonas();
+        ConfigRepository.saveIDBook();
     }
 
     public void cargarJson() {
-        ConfigRepository.cargarIdPersonas();
-        ConfigRepository.cargarIdBook();
-        bookRepository.loadLibros();
-        clienteRepository.loadClientes();
+        bookController.loadBooks();
+        clienteController.loadClient();
         adminController.loadAdm();
+        ConfigRepository.loadIdPersonas();
+        ConfigRepository.loadIdBook();
     }
 
 }

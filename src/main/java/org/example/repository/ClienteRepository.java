@@ -3,9 +3,11 @@ package org.example.repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Cliente;
+import org.example.entity.Persona;
 import org.example.exception.MisExcepciones;
 import org.example.repository.implementations.CRUD;
 import org.example.repository.implementations.Logueo;
+import org.example.view.ClienteView;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -14,19 +16,16 @@ import java.util.*;
 public class ClienteRepository implements CRUD, Logueo {
     private final String CLIENTE_PATH = "src/main/resources/clientes.json";
     private final Gson gson = new Gson();
-    public static Map<String, Cliente> mapClientes = new TreeMap<>();
+    public static  Map<String, Cliente> mapClientes = new TreeMap<>();
+    private final ClienteView clienteView = new ClienteView();
 
     public ClienteRepository() {
     }
 
-    @Override
-    public void Register(Object c) {
-        if (c instanceof Cliente) {
-            Cliente client = (Cliente) c;
-            mapClientes.put(client.getDni(), client);
-            saveClientes();
-        }
-    }
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //Implementacion de <Interface> Logueo
+
 
     @Override
     public Cliente findUser(Object o) {
@@ -41,17 +40,52 @@ public class ClienteRepository implements CRUD, Logueo {
         }
         return null;
     }
+    @Override
+    public void Register(Object c) {
+        mapClientes.put(((Cliente)c).getDni() , (Cliente) c);
+        saveClientes();
 
-
-    public boolean dniCheck(String dni) {
-        for (Cliente cliente : mapClientes.values()) {
-            if (cliente.getDni().equals(dni)) {
-                return true;
-            }
-        }
-        return false;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    //Implementacion de <Interface> CRUD
+    @Override
+    public void create(Object o) {
+        if (o instanceof Persona) {
+            Cliente client = new Cliente(((Persona) o).getDni(),((Persona) o).getName(), ((Persona) o).getLastName(), ((Persona) o).getAge(), ((Persona) o).getEmail(), ((Persona) o).getPhone(),((Persona) o).getAdress(),((Persona) o).getPassword(),false);
+            client.setIdPersona(((Persona) o).getIdPersona());
+            Register(client);
+            Persona.setId(Persona.getId()-1);
+        }
+    }
+
+    @Override
+    public Map<String, Cliente> read(Object o) {
+        return mapClientes;
+    }
+
+    @Override
+    public void update(Object o) {
+
+        if (o instanceof Cliente) {
+            System.out.println("Actualizado Correctamente.");
+
+            saveClientes();
+        }
+    }
+
+    @Override
+    public void delete(Object o) {
+        if (o instanceof Cliente user) {
+            user.setUserActive(clienteView.checkDownAccount());
+        }
+        saveClientes();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Manejo de Json
     public void saveClientes() {
         try (Writer writer = new FileWriter(CLIENTE_PATH)) {
             gson.toJson(mapClientes, writer);
@@ -73,29 +107,4 @@ public class ClienteRepository implements CRUD, Logueo {
         }
     }
 
-    @Override
-    public Object create() {
-        return null;
-    }
-
-    @Override
-    public Map<String, Cliente> read(Object o) {
-        return mapClientes;
-    }
-
-    @Override
-    public Object update(Object o) {
-
-        if (o instanceof Cliente) {
-            System.out.println("Actualizado Correctamente.");
-
-            saveClientes();
-        }
-        return o;
-    }
-
-    @Override
-    public void delete(Object o) {
-
-    }
 }

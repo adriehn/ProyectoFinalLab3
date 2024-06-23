@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Cliente extends Persona {
 
-private boolean userActive;
     private ArrayList<Book> currentlyBorrowedBook;//
     private Map<Integer, Book> returnHistory;
     private Set<Book> listFavBook;
@@ -14,7 +13,6 @@ private boolean userActive;
     public Cliente(String dni, String name, String lastName, Integer age, String email, String phone, String address, String password, boolean rol) {
         super(dni, name, lastName, age, email, phone, address, password, rol);
         this.currentlyBorrowedBook = new ArrayList<>();
-        userActive = true;
         this.returnHistory = new HashMap<>();
         this.listFavBook = new HashSet<>();
         this.listMessages = new ArrayList<>();
@@ -24,13 +22,7 @@ private boolean userActive;
         return listMessages;
     }
 
-    public boolean isUserActive() {
-        return userActive;
-    }
 
-    public void setUserActive(boolean userActive) {
-        this.userActive = userActive;
-    }
 
     public ArrayList<Book> getCurrentlyBorrowedBook() {
         return currentlyBorrowedBook;

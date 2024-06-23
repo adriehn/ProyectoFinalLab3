@@ -18,32 +18,22 @@ public class BookController {
     }
 
 
-
-    public void toListBooks() {
-        List<Book> bookList = getListaLibros();
-        if (bookList.isEmpty()) {
-            throw new MisExcepciones("No existen libros");
-        } else {
-            BookView.viewBooks(bookList);
-        }
-
-    }
-
     public List<Book> getListaLibros() {
         return bookRepository.getListaLibros();
     }
 
-    public void  terminateBook()//dar de baja logica
+    public void terminateBook()//dar de baja o alta un libro
     {
-        Integer idBuscar =  bookView.pedirEntero("Ingresar id del libro: ");
+        Integer idBuscar = bookView.pedirEntero("Ingresar id del libro: ");
 
         Book book = bookRepository.searchLibroId(idBuscar);
-
-        book.setStatus();
+        bookRepository.delete(book);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Metodo que llama un usuario para asignarle puntaje a un libro que devuelve.
     public void addRating(Book book, double rating) {
-        // Actualizar la suma total de puntuaciones
+        // Actualiza la suma total de puntuaciones
         double newSumRatings = book.getSumRatings() + rating;
         book.setSumRatings(newSumRatings);
 
@@ -51,44 +41,76 @@ public class BookController {
         int newTotalRatings = book.getTotalRatings() + 1;
         book.setTotalRatings(newTotalRatings);
 
-        // Calcular y actualizar el promedio de puntuaciones
+        // Calcula y actualiza el promedio de puntuaciones
         double newRate = newSumRatings / newTotalRatings;
         book.setRate(newRate);
-        bookRepository.saveLibros();
+        bookRepository.saveBooks();
     }
+    //////////////////////////////////////////////////////////////////////////////////////////////
 
-    public Book searchBookId()
-    {
+    public Book searchBookId() {
         Integer idBuscar = bookView.pedirEntero("Ingresar id del libro: ");
 
         return bookRepository.searchLibroId(idBuscar);
     }
 
-    public void editBook(){
-        Book bookEdit = searchBookId();
-
-        bookView.editarLibro(bookEdit);
-
-    }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Case 1 del inicio del Administrador.
     public void creatBook() {
         Book newBook = bookView.creatBook();
-        bookRepository.addList(newBook);
+        bookRepository.create(newBook);
     }
 
-    public void viewBook(Book book) {
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Case 2 del inicio del Administrador.
+    public void editBook() {
+        Book bookEdit = searchBookId();
+        if(bookEdit != null)
+        {
+            boolean exit = true;
+            while (exit) {
+                exit = bookView.editarLibro(bookEdit);
+            }
+            bookRepository.update(bookEdit);
+        }
+    }
 
-        BookView.viewBook(book);
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Case 3 del inicio del Administrador.
+    public void toListBooks() {
+        List<Book> bookList = getListaLibros();
+        if (bookList.isEmpty()) {
+            throw new MisExcepciones("No existen libros");
+        } else {
+            bookView.viewBooks(bookList);
+        }
 
     }
 
-    public void viewBooks(List<Book> books) {
+    public void viewBook(Book book) {//Muestra un solo libro
 
-        BookView.viewBooks(books);
+        bookView.displayInfo(book);
 
     }
 
+    public void viewBooks(List<Book> books) {//Muestra una coleccion de libros
+
+        bookView.viewBooks(books);
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Metodo que usa el usuario para solicitar un libro
     public boolean checkStock(Book Book) {
         return Book.getStock() > 0;
+    }
+
+    public void loadBooks() {
+        bookRepository.loadBooks();
+
+    }
+
+    public void saveBooks() {
+        bookRepository.saveBooks();
     }
 }

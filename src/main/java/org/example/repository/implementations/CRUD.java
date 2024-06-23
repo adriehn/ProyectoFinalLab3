@@ -2,12 +2,12 @@ package org.example.repository.implementations;
 
 public interface CRUD<T> {
 
-    T create();
+    void create(T t);
 
     T read(T t);
 
-    T update(T t);
+    void update(T t);
 
-    void delete(T t);
+    void delete(T t);///Se llama delete para respetas las siglas CRUD, pero en realidad deshabilita
 
 }
