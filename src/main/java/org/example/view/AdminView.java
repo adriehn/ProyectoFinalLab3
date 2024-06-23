@@ -11,7 +11,7 @@ public class AdminView implements View {
     Scanner scanner = new Scanner(System.in);
     public final String sendMensagges = "Ingrese el mensaje a enviar...";
     public final String searchUser = "Ingrese el Dni del usuario.";
-    public final String admMessage = "\nSe asigno correctamente su rol como administrativo.\n";
+    public static final String admMessage = "\nSe asigno correctamente su rol como administrativo.\n";
 
     @Override
     public Integer modifyObject(Object object) {

@@ -34,7 +34,6 @@ public class AdminController implements Controller<Admin> {
     public void createAdm(Persona nuevo) {
         try {
             adminRepository.create(nuevo);
-            System.out.println(adminView.admMessage);
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }

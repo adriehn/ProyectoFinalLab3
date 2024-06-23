@@ -3,6 +3,7 @@ package org.example.controller;
 import org.example.entity.*;
 import org.example.repository.AdminRepository;
 import org.example.repository.ConfigRepository;
+import org.example.view.AdminView;
 import org.example.view.ClienteView;
 import org.example.view.PersonaView;
 
@@ -27,6 +28,7 @@ public class PersonaController {
         boolean check = dniCheck(newUser.getDni());//Verificamos si existe el dni
         if (!check) {
             if (config.getAdminPassword().equalsIgnoreCase(newUser.getPassword())) {//Verificamos si la contraseña es la predefinida para registrar un nuevo admin
+                System.out.println(AdminView.admMessage);
                 adminController.createAdm(newUser);
             } else {
                 clienteController.createClient(newUser);

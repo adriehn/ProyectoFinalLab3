@@ -28,8 +28,6 @@ public class MenuMain {
 
     private final PersonaController personaController = new PersonaController();
 
-
-
     public MenuMain() {
     }
 
