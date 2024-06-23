@@ -76,7 +76,9 @@ public class AdminRepository implements CRUD, Logueo {
                     true,
                     clienteView.pedirDato(PersonaView.requestDepartmentMessage),
                     clienteView.pedirDato(PersonaView.requestSpecialityMessage)
+
             );
+            admin.setIdPersona(((Persona) persona).getIdPersona());
             Register(admin);
         } else {
             throw new IllegalArgumentException("El objeto no es una instancia de Admin o Persona");
