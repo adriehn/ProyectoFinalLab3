@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Admin;
 import org.example.entity.Cliente;
@@ -8,6 +9,7 @@ import org.example.entity.Persona;
 import org.example.exception.MisExcepciones;
 import org.example.repository.implementations.CRUD;
 import org.example.repository.implementations.Logueo;
+import org.example.view.AdminView;
 import org.example.view.ClienteView;
 import org.example.view.PersonaView;
 
@@ -74,10 +76,10 @@ public class AdminRepository implements CRUD, Logueo {
                     true,
                     clienteView.pedirDato(PersonaView.requestDepartmentMessage),
                     clienteView.pedirDato(PersonaView.requestSpecialityMessage)
-            );
-            admin.setIdPersona(personaObj.getIdPersona());
-            Register(admin);
 
+            );
+            admin.setIdPersona(((Persona) persona).getIdPersona());
+            Register(admin);
         } else {
             throw new IllegalArgumentException("El objeto no es una instancia de Admin o Persona");
         }
