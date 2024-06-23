@@ -23,19 +23,10 @@ public class Main {
         /////////////////////////////////////////////////////////////////
         ///////////////////////SECTOR PRUEBA
         //////////////////////////////////////////////////////////////////
-       /* AdminRepository adminRepository = new AdminRepository();
-        AdminController adminController =  new AdminController(adminRepository);
-        MenuMain menuMain = new MenuMain(adminController);
-        SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(menuMain);
-            mainFrame.setVisible(true);
-        });
-*/
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
-///verificar el ingreso de datos en rating del libro , si ingresa punto y no coma rompe
-        ///admin : busca un libro fuera del indice y finaliza session.
+
 
 
 

@@ -24,6 +24,7 @@ public class AdminView implements View {
         System.out.println("07. Contraseña");
         System.out.println("08. Cerrar temporalmente la cuenta.");
         System.out.println("09. Volver.");
+        System.out.print("Ingresar opcion: ");
         Integer opcion = scanner.nextInt();
         scanner.nextLine();
         return opcion;
@@ -41,6 +42,7 @@ public class AdminView implements View {
         System.out.println("07. Buscar usuario y enviar notificacion");
         System.out.println("08. Perfil");
         System.out.println("09. Salir");
+        System.out.print("Ingresar opcion: ");
 
         int opcion = scanner.nextInt();
         scanner.nextLine();

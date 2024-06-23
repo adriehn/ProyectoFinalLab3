@@ -49,6 +49,7 @@ public class ClienteView implements View {
         System.out.println("03. Ver Historial libros solicitados.");
         System.out.println("04. Modificar datos.");
         System.out.println("05. Volver.");
+        System.out.print("Ingresar opcion: ");
         int opcion = scanner.nextInt();
         scanner.nextLine();
         return opcion;
