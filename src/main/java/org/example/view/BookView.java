@@ -82,27 +82,31 @@ public class BookView implements View {
 
     @Override
     public Integer modifyObject(Object object) {
-        System.out.println("¿Qué campo desea editar?");
-        System.out.println("1. Nombre del Libro");
-        System.out.println("2. Autor");
-        System.out.println("3. Editorial");
-        System.out.println("4. Género");
-        System.out.println("5. Idioma");
-        System.out.println("6. Sinopsis");
-        System.out.println("7. Stock");
-        System.out.println("8. Vendidos");
-        System.out.println("9. Volver");
-        Integer opcion = scanner.nextInt();
-        scanner.nextLine();  // Limpiar el buffer
-        return opcion;
+            System.out.println("¿Qué campo desea editar?");
+            System.out.println("1. Nombre del Libro");
+            System.out.println("2. Autor");
+            System.out.println("3. Editorial");
+            System.out.println("4. Género");
+            System.out.println("5. Idioma");
+            System.out.println("6. Sinopsis");
+            System.out.println("7. Stock");
+            System.out.println("8. Vendidos");
+            System.out.println("9. Volver");
+            Integer opcion = scanner.nextInt();
+            scanner.nextLine();  // Limpiar el buffer
+            return opcion;
     }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     public boolean editarLibro(Book libro) {
         if (libro == null) {
             System.out.println("Libro no encontrado.");
             return false;
         }
+        displayInfo(libro);
+
         Integer opcion = modifyObject(null);
+
         switch (opcion) {
             case 1 -> libro.setNameBook(pedirDato(requestNameBook));
             case 2 -> libro.setAuthor(pedirDato(requestNameAuthor));
@@ -119,6 +123,7 @@ public class BookView implements View {
         }
         return true;
     }
+
     @Override
     public Integer pedirEntero(Object o) {
         if (o instanceof String) {

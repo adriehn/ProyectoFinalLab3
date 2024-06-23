@@ -122,6 +122,8 @@ public class ClienteController implements Controller {
                 index++;
             }
         }
+        ClearConsole();
+        ClearConsole();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
