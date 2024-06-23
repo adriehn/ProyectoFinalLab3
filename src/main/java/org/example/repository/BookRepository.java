@@ -3,7 +3,6 @@ package org.example.repository;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Book;
-import org.example.entity.Persona;
 import org.example.exception.MisExcepciones;
 import org.example.repository.implementations.CRUD;
 
@@ -21,7 +20,7 @@ public class BookRepository implements CRUD {
 
 
     public BookRepository() {
-        loadLibros();
+        loadBooks();
     }
 
     public List<Book> getListaLibros() {
@@ -32,10 +31,10 @@ public class BookRepository implements CRUD {
         this.listaLibros = listaLibros;
     }
 
-    public void addList(Book libro)
-    {
+
+    public void addList(Book libro) {
         listaLibros.add(libro);
-        saveLibros();
+        saveBooks();
     }
 
     public Book searchLibroId(Integer id) {
@@ -48,9 +47,15 @@ public class BookRepository implements CRUD {
         return null;
     }
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //Implementacion de <Interface> CRUD
     @Override
-    public Object create() {
-        return null;
+    public void create(Object o) {
+        if (o instanceof Book) {
+            addList((Book) o);
+        }
     }
 
     @Override
@@ -66,16 +71,27 @@ public class BookRepository implements CRUD {
     }
 
     @Override
-    public Object update(Object o) {
-        return null;
+    public void update(Object o) {
+        if (o instanceof Book) {
+            System.out.println("Actualizado Correctamente.");
+            saveBooks();
+        }
     }
 
     @Override
     public void delete(Object o) {
-
+        if (o instanceof Book book) {
+            book.setStatus();
+        }
+        saveBooks();
     }
 
-    public void loadLibros() {
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///Manejo de Json
+
+
+    public void loadBooks() {
         try (Reader reader = new FileReader(BOOK_PATH)) {
             Type userListType = new TypeToken<List<Book>>() {
             }.getType();
@@ -89,16 +105,11 @@ public class BookRepository implements CRUD {
 
     }
 
-    public void saveLibros() {
+    public void saveBooks() {
         try (Writer writer = new FileWriter(BOOK_PATH)) {
             gson.toJson(getListaLibros(), writer);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-
 }

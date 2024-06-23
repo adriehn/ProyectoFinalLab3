@@ -13,7 +13,11 @@ import java.io.IOException;
 import static java.awt.SystemColor.menu;
 
 public class Main {
+    private static final MenuMain menu = new MenuMain();
 
+    static {
+        menu.cargarJson();
+    }
     public static void main(String[] args) throws IOException {
 
         /////////////////////////////////////////////////////////////////
@@ -27,21 +31,19 @@ public class Main {
             mainFrame.setVisible(true);
         });
 */
-
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
-
-
-
 ///verificar el ingreso de datos en rating del libro , si ingresa punto y no coma rompe
         ///admin : busca un libro fuera del indice y finaliza session.
 
 
-        MenuMain menu = new MenuMain();
 
-        menu.mainFlow();
-
+        try {
+            menu.mainFlow();
+        } finally {
+            menu.finalizarPrograma();
+        }
     }
 
 }

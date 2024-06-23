@@ -2,7 +2,7 @@ package org.example.entity;
 
 import java.util.Optional;
 
-public abstract class Persona {
+public class Persona {
     private static Integer id = 0;
     private String dni;
     private String name;
@@ -14,6 +14,8 @@ public abstract class Persona {
     private String password;
     private boolean rol;
     private Integer idPersona;
+
+    private boolean userActive;
 
 
     public static Integer getId() {
@@ -116,8 +118,15 @@ public abstract class Persona {
         this.password = password;
         this.rol = rol;
         this.idPersona = ++id;
+        this.userActive = true;
+    }
+    public boolean isUserActive() {
+        return userActive;
     }
 
+    public void setUserActive(boolean userActive) {
+        this.userActive = userActive;
+    }
     public Persona() {
     }
 
