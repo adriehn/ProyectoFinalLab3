@@ -1,15 +1,12 @@
-package org.example.repository;
+package org.example.repository.implementations;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Admin;
-import org.example.entity.Cliente;
 import org.example.entity.Persona;
 import org.example.exception.MisExcepciones;
-import org.example.repository.implementations.CRUD;
-import org.example.repository.implementations.Logueo;
-import org.example.view.AdminView;
+import org.example.repository.CRUD;
+import org.example.repository.Logueo;
 import org.example.view.ClienteView;
 import org.example.view.PersonaView;
 

@@ -1,4 +1,4 @@
-package org.example.repository.implementations;
+package org.example.repository;
 
 import org.example.entity.Admin;
 import org.example.exception.MisExcepciones;

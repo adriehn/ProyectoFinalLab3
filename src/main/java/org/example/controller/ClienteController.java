@@ -4,9 +4,9 @@ import java.util.*;
 
 import org.example.entity.*;
 import org.example.exception.MisExcepciones;
-import org.example.repository.BookRepository;
-import org.example.repository.ClienteRepository;
-import org.example.repository.implementations.Controller;
+import org.example.repository.implementations.BookRepository;
+import org.example.repository.implementations.ClienteRepository;
+import org.example.repository.Controller;
 import org.example.view.ClienteView;
 import org.example.view.PersonaView;
 
@@ -105,7 +105,8 @@ public class ClienteController implements Controller {
                         case 4 -> {//no hace nada, incrementa index
                         }
                         case 5 -> searchLibro(user);//Busca libros por coincidencia de una palabra clave
-                        case 6 -> suggestedBooks(user, libros);//Es como este menu, pero recorre la lista de forma aleatoria
+                        case 6 ->
+                                suggestedBooks(user, libros);//Es como este menu, pero recorre la lista de forma aleatoria
                         case 7 -> {
                             profile(user);///menu del usuario, evalua si sigue activo sino finaliza la session
                             if (!user.isUserActive()) {
@@ -167,12 +168,9 @@ public class ClienteController implements Controller {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///CASE 2 - SE USA EN CASE 1 TAMBIEN
     public void addBookFav(Cliente user, Book libro) {
-        if(!user.getCurrentlyBorrowedBook().contains(libro))
-        {
+        if (!user.getCurrentlyBorrowedBook().contains(libro)) {
             user.getListFavBook().add(libro);
-        }
-        else
-        {
+        } else {
             System.out.println(PersonaView.redundantFav);
             scanner.nextLine();
         }
@@ -195,8 +193,7 @@ public class ClienteController implements Controller {
     public void searchLibro(Object object) {
         if (object instanceof Cliente) {
             ClearConsole();
-            System.out.print("Ingrese el nombre del libro: ");
-            String busqueda = scanner.nextLine();
+            String busqueda = clienteView.pedirDato("Ingrese el nombre del libro: ");
             List<Book> librosEncontrados = new ArrayList<>(); ///creamos una lista nueva donde se almacenan las coincidencias
             List<Book> resultados = bookController.getListaLibros();
 
@@ -216,6 +213,7 @@ public class ClienteController implements Controller {
         //Metodo para verificar que la lista no este vacia, sino lo esta, se muestra de a uno y despliegan opciones.
         if (librosEncontrados.isEmpty()) {
             System.out.println(PersonaView.searchBook);
+            scanner.nextLine();
         } else {
             for (Book librosEncontrado : librosEncontrados) {
                 System.out.println(librosEncontrado);
@@ -395,12 +393,18 @@ public class ClienteController implements Controller {
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///Case 8
     public void showUnreadMessages(Cliente cliente) {
+        int cont = 0;
         for (Messages mensaje : cliente.getListMessages()) {
             if (!mensaje.isRead()) {
                 System.out.println(mensaje.getContent());
                 scanner.nextLine();
                 mensaje.Mark_AsRead();
+                cont++;
             }
+        }
+        if (cont == 0) {
+            System.out.println(clienteView.newMessagesEmpty);
+            scanner.nextLine();
         }
         clienteRepository.saveClientes();
 
@@ -409,11 +413,18 @@ public class ClienteController implements Controller {
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///Case 9
     public void viewMesagges(Cliente cliente) {
-        for (Messages mensaje : cliente.getListMessages()) {
-            System.out.println(mensaje.getContent());
-            scanner.nextLine();
+        if (cliente.getListMessages().isEmpty()) {
+            System.out.println(clienteView.newMessagesEmpty);
+        } else {
+            for (Messages mensaje : cliente.getListMessages()) {
+                System.out.println(mensaje.toString());
+                mensaje.Mark_AsRead();
+                scanner.nextLine();
+            }
+            clienteRepository.saveClientes();
         }
-        clienteRepository.saveClientes();
+        scanner.nextLine();
+
     }
 
     ///Metodo que llama el administrador para dejarle un mensaje al usuario

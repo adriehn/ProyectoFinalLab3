@@ -7,10 +7,9 @@ import org.example.controller.PersonaController;
 import org.example.entity.Admin;
 import org.example.entity.Cliente;
 import org.example.exception.MisExcepciones;
-import org.example.repository.AdminRepository;
-import org.example.repository.BookRepository;
-import org.example.repository.ClienteRepository;
-import org.example.repository.ConfigRepository;
+import org.example.repository.implementations.AdminRepository;
+import org.example.repository.implementations.BookRepository;
+import org.example.repository.implementations.ConfigRepository;
 
 import java.util.Optional;
 import java.util.Scanner;

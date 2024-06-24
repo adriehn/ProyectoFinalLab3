@@ -2,7 +2,7 @@ package org.example.view;
 
 import org.example.entity.Admin;
 import org.example.exception.MisExcepciones;
-import org.example.repository.implementations.View;
+import org.example.repository.View;
 
 import java.util.Scanner;
 

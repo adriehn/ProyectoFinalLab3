@@ -2,9 +2,9 @@ package org.example.controller;
 
 import org.example.entity.*;
 import org.example.exception.MisExcepciones;
-import org.example.repository.AdminRepository;
-import org.example.repository.ClienteRepository;
-import org.example.repository.implementations.Controller;
+import org.example.repository.implementations.AdminRepository;
+import org.example.repository.implementations.ClienteRepository;
+import org.example.repository.Controller;
 import org.example.view.AdminView;
 import org.example.view.ClienteView;
 import org.example.view.PersonaView;

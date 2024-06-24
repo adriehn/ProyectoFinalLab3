@@ -1,10 +1,10 @@
-package org.example.repository;
+package org.example.repository.implementations;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.entity.Book;
 import org.example.exception.MisExcepciones;
-import org.example.repository.implementations.CRUD;
+import org.example.repository.CRUD;
 
 import java.io.*;
 import java.lang.reflect.Type;
