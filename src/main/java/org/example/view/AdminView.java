@@ -37,7 +37,7 @@ public class AdminView implements View {
         System.out.println("02. Editar libro");
         System.out.println("03. Listar libros");
         System.out.println("04. Buscar libro");
-        System.out.println("05. Dar de baja libro");
+        System.out.println("05. Dar de baja/alta libro");
         System.out.println("06. Enviar notificacion a todos los usuarios.");
         System.out.println("07. Buscar usuario y enviar notificacion");
         System.out.println("08. Perfil");
