@@ -165,7 +165,11 @@ public class AdminController implements Controller<Admin> {
         Collection<Cliente> coleccionClientes = mapaClientes.values();
         List<Cliente> listaClientes = new ArrayList<>(coleccionClientes);
         for (Cliente cliente : listaClientes) {
-            clienteController.receiveMessage(cliente, mensaje);
+            if(cliente.isUserActive())
+            {
+                clienteController.receiveMessage(cliente, mensaje);
+
+            }
         }
     }
 
